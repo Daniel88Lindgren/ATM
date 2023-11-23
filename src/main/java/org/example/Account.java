@@ -2,7 +2,7 @@ package org.example;
 
 public class Account {
 
-/*
+
     public Account{
         private String accountName;
         private double balance;
@@ -34,5 +34,5 @@ public class Account {
         }
     }
 
- */
+
 }
