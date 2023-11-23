@@ -19,9 +19,11 @@ public class LoginWindow {
         jFrame.setSize(300, 150);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setContentPane(Window1);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
+        jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
-        // Lägger till användare i listan
+        // Lägger till användare i listan.
         users.add(new UserList("Lars", "123"));
         users.add(new UserList("Arta", "234"));
         users.add(new UserList("Daniel", "345"));
@@ -34,6 +36,7 @@ public class LoginWindow {
                 String username = usernameField.getText();
                 String password = passwordField.getText();
                 if (authenticate(username, password)) {
+                    jFrame.setVisible(false);
                     new MainMenu();
                 } else {
                         JOptionPane.showMessageDialog(jFrame,"Wrong password or usename, Please try again!");
