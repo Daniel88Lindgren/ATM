@@ -16,6 +16,8 @@ public class MainMenu {
         jFrame.setSize(450, 300);
         jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         jFrame.setContentPane(Window2);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
+        jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
     }
