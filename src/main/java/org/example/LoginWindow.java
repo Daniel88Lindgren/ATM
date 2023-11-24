@@ -24,16 +24,16 @@ public class LoginWindow {
         jFrame.setLocationRelativeTo(null);
 
         // Lägger till användare i listan.
-        users.add(new UserList("Lars", "123"));
-        users.add(new UserList("Arta", "234"));
-        users.add(new UserList("Daniel", "345"));
-        users.add(new UserList("Mickey", "456"));
-        users.add(new UserList("Anders", "567"));
+        users.add(new UserList("lars", "123"));
+        users.add(new UserList("arta", "234"));
+        users.add(new UserList("daniel", "345"));
+        users.add(new UserList("mickey", "456"));
+        users.add(new UserList("anders", "567"));
 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
+                String username = usernameField.getText().toLowerCase();
                 String password = passwordField.getText();
                 if (authenticate(username, password)) {
                     jFrame.setVisible(false);
