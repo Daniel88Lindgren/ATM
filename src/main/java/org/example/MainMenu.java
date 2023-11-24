@@ -29,6 +29,7 @@ public class MainMenu {
                 jFrame.setVisible(false);
                 new Account();
 
+
             }
         });
     }

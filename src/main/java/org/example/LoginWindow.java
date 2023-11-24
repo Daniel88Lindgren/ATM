@@ -12,6 +12,15 @@ public class LoginWindow {
     private JPanel Window1;
 
     private ArrayList<UserList> users = new ArrayList<>();
+    private UserList loggedInUser;//Daniel - to be able to track the logged in user
+
+    public UserList getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(UserList loggedInUser) {
+        this.loggedInUser = loggedInUser;
+    }
 
     public LoginWindow() {
         JFrame jFrame = new JFrame("Login Window");
@@ -23,7 +32,7 @@ public class LoginWindow {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
-        // Lägger till användare i listan.
+        // Pre-add users
         users.add(new UserList("lars", "123"));
         users.add(new UserList("arta", "234"));
         users.add(new UserList("daniel", "345"));
@@ -46,13 +55,19 @@ public class LoginWindow {
             }
         });
     }
+
+    //Method to check valid username and password
     private boolean authenticate(String username, String password) {
         for (UserList user : users) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                loggedInUser = user;//Daniel-set logged in user to be able to display account info in Account class
                 return true;
             }
         }
         return false;
     }
+
+
+
 }
 

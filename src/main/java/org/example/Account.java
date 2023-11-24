@@ -1,7 +1,6 @@
 package org.example;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,8 +12,12 @@ public class Account {
     private JButton accountInfoButton;
     private JButton changeAccountDetailsButton;
     private JButton backToMenuButton;
-    private JButton somethingElseButtonButton;
     private JPanel accountJPanel;
+    private JButton changePasswordButton;
+    private LoginWindow loginWindow;
+    public Account(LoginWindow loginWindow){
+        this.loginWindow = new LoginWindow();
+    }
 
 
     public String getAccountName() {
@@ -58,16 +61,12 @@ public class Account {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-            }
-        });
-
-
-        changeAccountDetailsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
             }
         });
+
+
+
         backToMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,5 +74,19 @@ public class Account {
                 new MainMenu();
             }
         });
+        changePasswordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
+
+    public void displayUserAccount(){
+        UserList loggedInUser = loginWindow.getLoggedInUser();
+
+
+    }
+
+
 }
