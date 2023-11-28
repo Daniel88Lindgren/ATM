@@ -12,28 +12,6 @@ public class LoginWindow {
     private JPanel Window1;
 
 
-    private String loggedInPassword;//Daniel - to be able to track the logged in user
-    private static String loggedInUser;//Daniel - to be able to track the logged in user
-
-
-
-
-    public static String getLoggedInUser() {
-        return loggedInUser;
-    }
-    public void setLoggedInUser(String loggedInUser) {
-        this.loggedInUser = loggedInUser;
-    }
-
-    public String getLoggedInPassword() {
-        return loggedInPassword;
-    }
-
-    public void setLoggedInPassword(String loggedInPassword) {
-        this.loggedInPassword = loggedInPassword;
-    }
-
-
 
     public LoginWindow() {
 
