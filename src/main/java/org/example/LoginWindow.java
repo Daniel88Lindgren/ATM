@@ -3,7 +3,7 @@ package org.example;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 public class LoginWindow {
     private JButton loginButton;
@@ -11,18 +11,33 @@ public class LoginWindow {
     private JTextField usernameField;
     private JPanel Window1;
 
-    private ArrayList<UserList> users = new ArrayList<>();
-    private UserList loggedInUser;//Daniel - to be able to track the logged in user
 
-    public UserList getLoggedInUser() {
+    private String loggedInPassword;//Daniel - to be able to track the logged in user
+    private static String loggedInUser;//Daniel - to be able to track the logged in user
+
+
+
+
+    public static String getLoggedInUser() {
         return loggedInUser;
     }
-
-    public void setLoggedInUser(UserList loggedInUser) {
+    public void setLoggedInUser(String loggedInUser) {
         this.loggedInUser = loggedInUser;
     }
 
+    public String getLoggedInPassword() {
+        return loggedInPassword;
+    }
+
+    public void setLoggedInPassword(String loggedInPassword) {
+        this.loggedInPassword = loggedInPassword;
+    }
+
+
+
     public LoginWindow() {
+
+
         JFrame jFrame = new JFrame("Login Window");
         jFrame.setVisible(true);
         jFrame.setSize(300, 150);
@@ -32,39 +47,28 @@ public class LoginWindow {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
-        // Pre-add users
-        users.add(new UserList("lars", "123"));
-        users.add(new UserList("arta", "234"));
-        users.add(new UserList("daniel", "345"));
-        users.add(new UserList("mickey", "456"));
-        users.add(new UserList("anders", "567"));
+
 
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText().toLowerCase();
+                String username = usernameField.getText();
                 String password = passwordField.getText();
                 if (authenticate(username, password)) {
                     jFrame.setVisible(false);
                     new MainMenu();
+                    // Proceed to next window or operation
                 } else {
-                        JOptionPane.showMessageDialog(jFrame,"Wrong password or usename, Please try again!");
-                        usernameField.setText("");
-                        passwordField.setText("");
+                    // Login failed
+                    JOptionPane.showMessageDialog(null, "Login Failed");
+                    // Show error message or clear fields
                 }
             }
         });
     }
 
-    //Method to check valid username and password
     private boolean authenticate(String username, String password) {
-        for (UserList user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                loggedInUser = user;//Daniel-set logged in user to be able to display account info in Account class
-                return true;
-            }
-        }
-        return false;
+        return UserManager.authenticate(username, password);
     }
 
 

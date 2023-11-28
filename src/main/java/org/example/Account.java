@@ -3,49 +3,21 @@ package org.example;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Account {
 
-    private String accountName;
-    private double balance;
-    private int pinCode;
     private JButton accountInfoButton;
     private JButton changeAccountDetailsButton;
     private JButton backToMenuButton;
     private JPanel accountJPanel;
     private JButton changePasswordButton;
-    private LoginWindow loginWindow;
-    public Account(LoginWindow loginWindow){
-        this.loginWindow = new LoginWindow();
-    }
 
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public int getPinCode() {
-        return pinCode;
-    }
-
-    public void setPinCode(int pinCode) {
-        this.pinCode = pinCode;
-    }
 
 
     public Account() {
+
 
         JFrame accountFrame = new JFrame("Account");
         accountFrame.setVisible(true);
@@ -60,7 +32,8 @@ public class Account {
         accountInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                accountFrame.setVisible(false);
+                new AccountDisplay();
 
             }
         });
@@ -82,11 +55,11 @@ public class Account {
         });
     }
 
-    public void displayUserAccount(){
-        UserList loggedInUser = loginWindow.getLoggedInUser();
 
-
-    }
 
 
 }
+
+
+
+

@@ -3,15 +3,20 @@ package org.example;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class AccountDisplay {
 
 
+
     private JButton backButton;
     private JPanel accountDisplayJPanel;
-    private JLabel displayInfoTextfield;
+    private JLabel displayAccounts;
+    private JLabel name;
+
 
     public AccountDisplay() {
+
 
 
         JFrame accountDisplayFrame = new JFrame("Your account info");
@@ -24,6 +29,7 @@ public class AccountDisplay {
         accountDisplayFrame.setLocationRelativeTo(null);
 
 
+        displayUserAccounts(); // Method call to display accounts
 
 
 
@@ -33,8 +39,31 @@ public class AccountDisplay {
             public void actionPerformed(ActionEvent e) {
                 accountDisplayFrame.setVisible(false);
                 new Account();
-
             }
         });
+
+
+
     }
+
+    // Method to display the current user's accounts
+    private void displayUserAccounts() {
+        List<UserManager.Account> accounts = UserManager.getCurrentUserAccounts();
+        StringBuilder accountsInfo = new StringBuilder("<html>"); // Using HTML for multiline
+        for (UserManager.Account account : accounts) {
+            accountsInfo.append("").append(account.getAccountName())//TA BORT
+                    .append(", Account nr: ").append(account.getAccountNr())//TA
+                    .append(", Balance: ").append(String.format("%.2f", account.getBalance()))
+                    .append("<br>"); // Line break for each account
+        }
+        accountsInfo.append("</html>"); // Closing HTML tag
+
+        displayAccounts.setText(accountsInfo.toString()); // Setting text to JLabel
+    }
+
+
 }
+
+
+
+
