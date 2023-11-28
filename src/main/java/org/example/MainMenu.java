@@ -23,6 +23,14 @@ public class MainMenu {
         jFrame.setLocationRelativeTo(null);
 
 
+        paymentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new PaymentWindow();
+
+            }
+        });
+
         accountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
