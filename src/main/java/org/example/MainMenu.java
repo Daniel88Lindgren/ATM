@@ -1,6 +1,8 @@
 package org.example;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainMenu {
     private JButton paymentButton;
@@ -20,5 +22,13 @@ public class MainMenu {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
+
+        paymentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new PaymentWindow();
+
+            }
+        });
     }
 }

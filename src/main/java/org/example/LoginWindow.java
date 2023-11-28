@@ -30,6 +30,7 @@ public class LoginWindow {
         users.add(new UserList("Mickey", "456"));
         users.add(new UserList("Anders", "567"));
 
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
