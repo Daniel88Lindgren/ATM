@@ -18,6 +18,7 @@ public class AdminWindow {
     private JLabel AccountLabel;
     private JLabel InformationLabel;
     private JLabel UsersLabel;
+    private UserManager selectedUser;
 
     public AdminWindow() {
         JFrame jFrame = new JFrame("Admin Window");
@@ -28,6 +29,13 @@ public class AdminWindow {
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
+
+        AdminMainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MainMenu();
+            }
+        });
 
         List<UserManager> users = UserManager.getUsers();
 
@@ -43,34 +51,50 @@ public class AdminWindow {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    // Get the selected user
                     String selectedUsername = (String) UserSelection.getSelectedValue();
 
-                    // Update the account list based on the selected user
                     updateAccountList(selectedUsername);
+
+                    UserManager selectedUser = findUserByUsername(selectedUsername);
+                    if (selectedUser != null) {
+                        displayUserInfo(selectedUser);
+                    }
                 }
             }
         });
 
 
-        AdminMainMenuButton.addActionListener(new ActionListener() {
+        AccountSelection.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                new MainMenu();
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && selectedUser != null) {
+
+                    String selectedAccountName = (String) AccountSelection.getSelectedValue();
+                    if (selectedAccountName != null) {
+                        UserManager.Account selectedAccount = findAccountByName(selectedUser, selectedAccountName);
+                        if (selectedAccount != null) {
+                            displayAccountInfo(selectedAccount);
+                        }
+                    }
+                }
             }
         });
     }
 
     private void updateAccountList(String username) {
         DefaultListModel<String> accountListModel = new DefaultListModel<>();
-        UserManager selectedUser = findUserByUsername(username);
+        selectedUser = findUserByUsername(username);
 
         if (selectedUser != null) {
             for (UserManager.Account account : selectedUser.getAccounts()) {
                 accountListModel.addElement(account.getAccountName());
             }
         }
+
         AccountSelection.setModel(accountListModel);
+
+        // Display user information
+        displayUserInfo(selectedUser);
     }
 
     private UserManager findUserByUsername(String username) {
@@ -80,5 +104,22 @@ public class AdminWindow {
             }
         }
         return null; // User not found
+    }
+
+    private void displayUserInfo(UserManager selectedUser){
+        InformationText.setText(("User: " + selectedUser.getUsername() + "\nPassword: " + selectedUser.getPassword()));
+    }
+    private void displayAccountInfo(UserManager.Account selectedAccount){
+        InformationText.setText(("Account Name: " + selectedAccount.getAccountName()
+                + "\nAccount Number: " + selectedAccount.getAccountNr()
+                + "\nBalance: " + selectedAccount.getBalance()));
+    }
+    private UserManager.Account findAccountByName(UserManager selectedUser, String accountName) {
+        for (UserManager.Account account : selectedUser.getAccounts()) {
+            if (account.getAccountName().equals(accountName)) {
+                return account;
+            }
+        }
+        return null; // Account not found
     }
 }
