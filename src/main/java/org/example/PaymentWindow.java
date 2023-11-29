@@ -12,7 +12,7 @@ public class PaymentWindow {
     private JTextField ocrNumberField;
     private JButton PaymentButton;
     private JFrame frame;
-
+    //test
     public PaymentWindow() {
         JFrame frame = new JFrame("Payment Window");
         frame.setContentPane(Payment1);
