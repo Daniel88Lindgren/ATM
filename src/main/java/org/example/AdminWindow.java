@@ -3,6 +3,9 @@ package org.example;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -19,6 +22,8 @@ public class AdminWindow {
     private JLabel InformationLabel;
     private JLabel UsersLabel;
     private UserManager selectedUser;
+    private String userInfo = "";
+    private String accountInfo = "";
 
     public AdminWindow() {
         JFrame jFrame = new JFrame("Admin Window");
@@ -30,13 +35,16 @@ public class AdminWindow {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
+        //Knappfunktion för tillbaka till Main Menu
         AdminMainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                jFrame.setVisible(false);
                 new MainMenu();
             }
         });
 
+        //Skapar listan med användare, baserat på användarnamnet
         List<UserManager> users = UserManager.getUsers();
 
         DefaultListModel<String> userModel = new DefaultListModel<>();
@@ -47,6 +55,7 @@ public class AdminWindow {
 
         UserSelection.setModel(userModel);
 
+        //ListSelection för användare
         UserSelection.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -63,7 +72,7 @@ public class AdminWindow {
             }
         });
 
-
+        //listSelection till Konton
         AccountSelection.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -81,6 +90,7 @@ public class AdminWindow {
         });
     }
 
+    //Uppdaterar kontolistan när man väljer en ny användare
     private void updateAccountList(String username) {
         DefaultListModel<String> accountListModel = new DefaultListModel<>();
         selectedUser = findUserByUsername(username);
@@ -93,33 +103,50 @@ public class AdminWindow {
 
         AccountSelection.setModel(accountListModel);
 
-        // Display user information
+        //Visa användar information
         displayUserInfo(selectedUser);
     }
 
+    //Metod för att hitta Användare kopplat till Användarnamn,
     private UserManager findUserByUsername(String username) {
         for (UserManager userManager : UserManager.getUsers()) {
             if (userManager.getUsername().equals(username)) {
                 return userManager;
             }
         }
-        return null; // User not found
+        return null; //Användare hittades inte
     }
 
-    private void displayUserInfo(UserManager selectedUser){
-        InformationText.setText(("User: " + selectedUser.getUsername() + "\nPassword: " + selectedUser.getPassword()));
+    //Visar Användare i Jlist USERS
+    private void displayUserInfo(UserManager selectedUser) {
+        //Visar användar informationen
+        userInfo = "User: " + selectedUser.getUsername() + "\nPassword: " + selectedUser.getPassword();
+
+        //När man väljer ny användare så nollas displayAccountInfo
+        accountInfo = "";
+
+        //Visar Användarinformation och kontoinformation
+        InformationText.setText(userInfo + accountInfo);
     }
-    private void displayAccountInfo(UserManager.Account selectedAccount){
-        InformationText.setText(("Account Name: " + selectedAccount.getAccountName()
+
+    //Visar kontoinformationen i JList ACCOUNT
+    private void displayAccountInfo(UserManager.Account selectedAccount) {
+        //Visar kontoinformationen
+        accountInfo = "\nAccount Name: " + selectedAccount.getAccountName()
                 + "\nAccount Number: " + selectedAccount.getAccountNr()
-                + "\nBalance: " + selectedAccount.getBalance()));
+                + "\nBalance: " + selectedAccount.getBalance();
+
+        //Visar Användarinformation och kontoinformation
+        InformationText.setText(userInfo + accountInfo);
     }
+
+    //Metod för att koppla rätt konto till rätt namn
     private UserManager.Account findAccountByName(UserManager selectedUser, String accountName) {
         for (UserManager.Account account : selectedUser.getAccounts()) {
             if (account.getAccountName().equals(accountName)) {
                 return account;
             }
         }
-        return null; // Account not found
+        return null; // Konto hittades inte
     }
 }
