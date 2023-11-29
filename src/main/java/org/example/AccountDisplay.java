@@ -51,8 +51,8 @@ public class AccountDisplay {
         List<UserManager.Account> accounts = UserManager.getCurrentUserAccounts();
         StringBuilder accountsInfo = new StringBuilder("<html>"); // Using HTML for multiline
         for (UserManager.Account account : accounts) {
-            accountsInfo.append("").append(account.getAccountName())//TA BORT
-                    .append(", Account nr: ").append(account.getAccountNr())//TA
+            accountsInfo.append("").append(account.getAccountName())
+                    .append(", Account nr: ").append(account.getAccountNr())
                     .append(", Balance: ").append(String.format("%.2f", account.getBalance()))
                     .append("<br>"); // Line break for each account
         }
