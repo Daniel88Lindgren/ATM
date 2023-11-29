@@ -47,5 +47,12 @@ public class MainMenu {
                 new Transaction();
             }
         });
+        adminButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.setVisible(false);
+                new AdminWindow();
+            }
+        });
     }
 }

@@ -19,8 +19,7 @@ public class AdminWindow {
     private JLabel InformationLabel;
     private JLabel UsersLabel;
 
-    public AdminWindow(List<UserManager> users) {
-        this.users = users;
+    public AdminWindow() {
         JFrame jFrame = new JFrame("Admin Window");
         jFrame.setVisible(true);
         jFrame.setSize(500, 500);
@@ -30,9 +29,12 @@ public class AdminWindow {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
+        List<UserManager> users = UserManager.getUsers();
+
         DefaultListModel<String> userModel = new DefaultListModel<>();
         for (UserManager userManager : users) {
-            userModel.addElement(UserManager.getUsername());
+            userModel.addElement(userManager.getUsername());
+
         }
 
         UserSelection.setModel(userModel);
@@ -59,28 +61,24 @@ public class AdminWindow {
         });
     }
 
-    private void updateAccountList(String username){
-        DefaultListModel<Account> accountListModel = (DefaultListModel<Account>) AccountSelection.getModel();
-        accountListModel.clear();
-
-        // Find the selected user
+    private void updateAccountList(String username) {
+        DefaultListModel<String> accountListModel = new DefaultListModel<>();
         UserManager selectedUser = findUserByUsername(username);
 
         if (selectedUser != null) {
-            // Display the user's accounts in AccountSelection
-            for (Account account : selectedUser.getAccounts()) {
-                accountListModel.addElement(account.getAccountType());
+            for (UserManager.Account account : selectedUser.getAccounts()) {
+                accountListModel.addElement(account.getAccountName());
             }
         }
         AccountSelection.setModel(accountListModel);
     }
-    private User findUserByUsername(String username) {
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return user;
+
+    private UserManager findUserByUsername(String username) {
+        for (UserManager userManager : UserManager.getUsers()) {
+            if (userManager.getUsername().equals(username)) {
+                return userManager;
             }
         }
         return null; // User not found
     }
-
 }
