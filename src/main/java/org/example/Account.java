@@ -33,6 +33,5 @@ public class Account {
             this.pinCode = pinCode;
         }
     }
-
  */
 }
