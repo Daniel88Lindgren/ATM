@@ -25,8 +25,12 @@ public class LoginWindow {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
-
-
+        // Lägger till användare i listan.
+        users.add(new UserList("Lars", "123"));
+        users.add(new UserList("Arta", "234"));
+        users.add(new UserList("Daniel", "345"));
+        users.add(new UserList("Mickey", "456"));
+        users.add(new UserList("Anders", "567"));
 
         loginButton.addActionListener(new ActionListener() {
             @Override
