@@ -3,8 +3,6 @@ package org.example;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Account {
 
@@ -13,7 +11,7 @@ public class Account {
     private JButton backToMenuButton;
     private JPanel accountJPanel;
     private JButton changePasswordButton;
-
+    private JButton createNewAccountButton;
 
 
     public Account() {
@@ -51,6 +49,13 @@ public class Account {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+        createNewAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                accountFrame.setVisible(false);
+                new NewAccountByUser();
             }
         });
     }

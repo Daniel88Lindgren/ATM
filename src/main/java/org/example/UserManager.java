@@ -12,7 +12,13 @@ import java.util.List;
         private static List<UserManager> users = new ArrayList<>();
         private static UserManager currentUser;
 
+        public static UserManager getCurrentUser() {
+            return currentUser;
+        }
 
+        public static void setCurrentUser(UserManager currentUser) {
+            UserManager.currentUser = currentUser;
+        }
 
         // Method to authenticate a user
         public static boolean authenticate(String username, String password) {
