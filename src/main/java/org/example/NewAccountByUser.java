@@ -11,13 +11,12 @@ public class NewAccountByUser {
     private JTextField EnterAccountName;
     private JTextField EnterAccountNr;
     private JTextField EnterAmount;
-    private JButton Create;
+
     private JButton cancel;
+    private JButton createButton;
 
 
     public NewAccountByUser() {
-
-
 
 
         JFrame NewAccountByUserFrame = new JFrame("Create new account");
@@ -30,19 +29,16 @@ public class NewAccountByUser {
         NewAccountByUserFrame.setLocationRelativeTo(null);
 
 
-
-
-
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                NewAccountByUserFrame.setVisible(false);
                 new Account();
-
-
             }
         });
 
-        Create.addActionListener(new ActionListener() {
+        createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 

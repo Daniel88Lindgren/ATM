@@ -10,11 +10,14 @@ import java.util.List;
         private String password;
         private List<Account> accounts = new ArrayList<>();
         private static List<UserManager> users = new ArrayList<>();
+
+        //currentUser to track the current logged in user in system
         private static UserManager currentUser;
 
         public static UserManager getCurrentUser() {
             return currentUser;
         }
+
 
         public static void setCurrentUser(UserManager currentUser) {
             UserManager.currentUser = currentUser;
@@ -38,7 +41,7 @@ import java.util.List;
             if (currentUser != null) {
                 return currentUser.getAccounts();
             } else {
-                return new ArrayList<>(); // Return an empty list if no user is logged in
+                return new ArrayList<>(); // Return an empty list if no user is logged in. Denna kan nog tas bort då någon alltid är inloggad
             }
         }
 
@@ -83,6 +86,18 @@ import java.util.List;
         public static void addUser(UserManager user) {
             users.add(user);
         }
+
+        //Method for the user to change password
+        public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
+            if (currentUser != null) {
+                currentUser.setPassword(newPassword);
+
+
+            }
+        }
+
+
+
 
 
         // Account inner class

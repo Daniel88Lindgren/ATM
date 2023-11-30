@@ -27,6 +27,8 @@ public class Account {
         accountFrame.setLocationRelativeTo(null);
 
 
+
+
         accountInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,12 +47,16 @@ public class Account {
                 new MainMenu();
             }
         });
+
         changePasswordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                accountFrame.setVisible(false);
+                new PasswordChangeByUser();
             }
         });
+
         createNewAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

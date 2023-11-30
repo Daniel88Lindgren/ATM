@@ -68,20 +68,20 @@
           <text value="Enter amount for account:"/>
         </properties>
       </component>
-      <component id="3ffe7" class="javax.swing.JButton" binding="create">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Create"/>
-        </properties>
-      </component>
       <component id="8e5b2" class="javax.swing.JButton" binding="cancel">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Cancel"/>
+        </properties>
+      </component>
+      <component id="9dc09" class="javax.swing.JButton" binding="createButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Create"/>
         </properties>
       </component>
     </children>

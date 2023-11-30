@@ -34,6 +34,8 @@ public class AccountDisplay {
 
 
 
+
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +61,10 @@ public class AccountDisplay {
         accountsInfo.append("</html>"); // Closing HTML tag
 
         displayAccounts.setText(accountsInfo.toString()); // Setting text to JLabel
+
     }
+
+
 
 
 }
