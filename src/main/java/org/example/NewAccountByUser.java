@@ -51,6 +51,7 @@ public class NewAccountByUser {
     }
 
 
+    //Method for user to create a new account with name, number and amount
     private void createNewAccount() {
         String inputAccountName = EnterAccountName.getText();
         int inputAccountNr;

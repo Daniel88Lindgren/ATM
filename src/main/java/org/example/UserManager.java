@@ -23,6 +23,7 @@ import java.util.List;
             UserManager.currentUser = currentUser;
         }
 
+
         // Method to authenticate a user
         public static boolean authenticate(String username, String password) {
             for (UserManager user : users) {

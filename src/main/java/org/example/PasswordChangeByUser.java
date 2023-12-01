@@ -21,9 +21,13 @@ public class PasswordChangeByUser {
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
         PasswordChangeByUserFrame.setIconImage(icon.getImage());
         PasswordChangeByUserFrame.setLocationRelativeTo(null);
+
+
+
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                PasswordChangeByUserFrame.setVisible(false);
                 new Account();
 
             }
@@ -33,12 +37,14 @@ public class PasswordChangeByUser {
             @Override
             public void actionPerformed(ActionEvent e) {
                 changePassword();
+                enterNewPasswordTextField.setText("");
 
             }
         });
     }
 
 
+    //Method to change password for the current logged in user
     public void changePassword() {
         String newPassword = enterNewPasswordTextField.getText();
         if (newPassword != null && !newPassword.trim().isEmpty()) {
