@@ -1,6 +1,9 @@
 
 package org.example;
 
+import org.w3c.dom.ls.LSOutput;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +13,7 @@ import java.util.List;
         private String password;
         private List<Account> accounts = new ArrayList<>();
         private static List<UserManager> users = new ArrayList<>();
-        private static UserManager currentUser;
-
+        public static UserManager currentUser;
 
 
         // Method to authenticate a user
@@ -24,7 +26,6 @@ import java.util.List;
             }
             return false; // No matching user found
         }
-
 
 
         // Method to get the current user's accounts
@@ -43,6 +44,7 @@ import java.util.List;
         public UserManager(String username, String password) {
             this.username = username;
             this.password = password;
+
         }
 
         public String getUsername() {
@@ -69,6 +71,31 @@ import java.util.List;
             Account newAccount = new Account(accountName, accountNr, balance);
             accounts.add(newAccount);
         }
+        public void removeAccount(Account accountToRemove) {
+            accounts.remove(accountToRemove);
+        }
+        public int getNextAccountNumber() {
+            int maxAccountNr = 0;
+
+            // Iterate over all users and their accounts
+            for (UserManager user : users) {
+                for (Account account : user.getAccounts()) {
+                    int currentAccountNr = account.getAccountNr();
+                    if (currentAccountNr > maxAccountNr) {
+                        maxAccountNr = currentAccountNr;
+                    }
+                }
+            }
+
+            return maxAccountNr + 1;
+        }
+        public String adminAddAccount(String accountName, double balance) {
+            int nextAccountNr = getNextAccountNumber();
+            Account newAccount = new Account(accountName, nextAccountNr, balance);
+            accounts.add(newAccount);
+            return null;
+        }
+
 
         public static List<UserManager> getUsers() {
             return users;
@@ -77,7 +104,7 @@ import java.util.List;
         public static void addUser(UserManager user) {
             users.add(user);
         }
-
+        public static void removeUser(UserManager user){users.remove(user);}
 
         // Account inner class
         public class Account {
@@ -102,6 +129,7 @@ import java.util.List;
             public double getBalance() {
                 return balance;
             }
+
         }
 
         // Static block to initialize users and their accounts
@@ -111,6 +139,7 @@ import java.util.List;
             UserManager userMickey = new UserManager("mickey", "333");
             UserManager userDaniel = new UserManager("daniel", "444");
             UserManager userAnders = new UserManager("anders", "555");
+            UserManager userAdmin = new UserManager("admin", "admin");
 
             userLars.addAccount("Checking", 1, 5000);
             userLars.addAccount("Savings", 2, 6000);
@@ -137,12 +166,17 @@ import java.util.List;
             userAnders.addAccount("Investment Account", 19, 4500);
             userAnders.addAccount("Retirement Account", 20, 500);
 
+            userAdmin.addAccount("Admin Account", 99, 10000000);
+
 
             addUser(userLars);
             addUser(userArta);
             addUser(userMickey);
             addUser(userDaniel);
             addUser(userAnders);
+            addUser(userAdmin);
         }
+        //--------------------------------------------------------------------------------------------------------------
+
     }
 

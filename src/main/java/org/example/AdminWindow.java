@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AdminWindow {
 
-
+    private JButton settingsAdmin;
     private JPanel AdminWindow;
     private JList AccountSelection;
     private JList UserSelection;
@@ -24,6 +24,8 @@ public class AdminWindow {
     private UserManager selectedUser;
     private String userInfo = "";
     private String accountInfo = "";
+    private JComboBox<String> userComboBox;
+    private UserManager userManager;
 
     public AdminWindow() {
         JFrame jFrame = new JFrame("Admin Window");
@@ -34,6 +36,16 @@ public class AdminWindow {
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
+
+        userComboBox = new JComboBox<>();
+        userManager = new UserManager("mickey","333");
+        String username = "mickey";
+        String password = "333";
+        if (UserManager.authenticate(username, password)) {
+
+            userManager = UserManager.currentUser;
+
+        }
 
         //Knappfunktion för tillbaka till Main Menu
         AdminMainMenuButton.addActionListener(new ActionListener() {
@@ -86,6 +98,13 @@ public class AdminWindow {
                         }
                     }
                 }
+            }
+        });
+
+        settingsAdmin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AdminSettings(selectedUser, userComboBox);
             }
         });
     }
