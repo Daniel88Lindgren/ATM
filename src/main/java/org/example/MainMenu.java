@@ -11,6 +11,8 @@ public class MainMenu {
     private JButton transactionButton;
     private JPanel Window2;
     private JLabel Mainmenu;
+    private JButton logoutButton1;
+    private JButton BLbutton;
 
     public MainMenu() {
         JFrame jFrame = new JFrame("Main menu");
@@ -46,6 +48,21 @@ public class MainMenu {
             public void actionPerformed(ActionEvent e) {
                 jFrame.setVisible(false);
                 new Transaction();
+            }
+        });
+        logoutButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.setVisible(false);
+                LoginWindow loginWindow = new LoginWindow();
+            }
+
+
+        });
+        BLbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Framtida överraskning från "Björnligan"!
             }
         });
     }
