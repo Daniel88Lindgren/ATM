@@ -69,8 +69,8 @@ public class MainMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Kollar ifall nuvarande användare är "admin". Annars har man inte tillgång till Admin Window.
-                if (UserManager.currentUser != null &&
-                        "admin".equals(UserManager.currentUser.getUsername())) {
+                if (UserManager.getCurrentUser() != null &&
+                        "admin".equals(UserManager.getCurrentUser().getUsername())) {
                     // Open the AdminWindow
                     jFrame.setVisible(false);
                     new AdminWindow();
