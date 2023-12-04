@@ -37,9 +37,6 @@ public class Account {
 
             }
         });
-
-
-
         backToMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

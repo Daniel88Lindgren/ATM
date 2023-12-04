@@ -32,8 +32,6 @@ public class AccountDisplay {
         displayUserAccounts(); // Method call to display accounts
 
 
-
-
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,9 +39,6 @@ public class AccountDisplay {
                 new Account();
             }
         });
-
-
-
     }
 
     // Method to display the current user's accounts
@@ -60,7 +55,6 @@ public class AccountDisplay {
 
         displayAccounts.setText(accountsInfo.toString()); // Setting text to JLabel
     }
-
 
 }
 
