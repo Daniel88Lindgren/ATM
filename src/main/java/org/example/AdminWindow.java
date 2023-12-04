@@ -43,7 +43,7 @@ public class AdminWindow {
         String password = "333";
         if (UserManager.authenticate(username, password)) {
 
-            userManager = UserManager.currentUser;
+            userManager = UserManager.getCurrentUser();
 
         }
 
