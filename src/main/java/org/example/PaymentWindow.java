@@ -1,8 +1,11 @@
 package org.example;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentWindow {
     private JPanel Payment1;
@@ -11,16 +14,24 @@ public class PaymentWindow {
     private JTextField AmountField;
     private JTextField ocrNumberField;
     private JButton PaymentButton;
+    private JTextPane displayPaymentHistoryTextPane;
+    private JButton backToMenuButton;
+    private JTable Paymenthistorytable;
+    private DefaultTableModel paymentHistoryModel;
     private JFrame frame;
 
     public PaymentWindow() {
         JFrame frame = new JFrame("Payment Window");
         frame.setContentPane(Payment1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize( 400, 250);
         frame.pack();
+        ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
+        frame.setIconImage(icon.getImage());
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        initializePaymentHistory();
 
         PaymentButton.addActionListener(new ActionListener() {
             @Override
@@ -28,14 +39,27 @@ public class PaymentWindow {
                 processPayment();
             }
         });
+
+        backToMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                new MainMenu();
+            }
+        });
     }
-    /**
-     * Processar en betalningsförfrågan baserad på användarinmatningen.
-     * Hämtar text från användargränssnittet och skapar ett Payment-objekt.
-     * Validerar betalningsuppgifterna och ger användaren feedback via dialogrutor.
-     * Visar ett framgångsmeddelande om betalningen är giltig eller ett felmeddelande annars.
-     * Hanterar NumberFormatException för att säkerställa att beloppet är en giltig siffra.
-     */
+
+    private void initializePaymentHistory() {
+
+        // Skapa kolumnnamn för JTable
+        String[] columnNames = {"Date", "From Account", "To Account", "Amount", "OCR Number"};
+        paymentHistoryModel = new DefaultTableModel(columnNames, 0);
+        Paymenthistorytable.setModel(paymentHistoryModel);
+    }
+
+
+    private List<Payment> paymentHistoryList = new ArrayList<>();
+
     private void processPayment() {
         String fromAccount = FromAccountField.getText();
         String toAccount = ToAccountField.getText();
@@ -80,6 +104,7 @@ public class PaymentWindow {
             return true;
         }
     }
+
 
     public static void main(String[] args) {
         new PaymentWindow();
