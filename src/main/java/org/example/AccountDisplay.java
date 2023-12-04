@@ -43,9 +43,6 @@ public class AccountDisplay {
                 new Account();
             }
         });
-
-
-
     }
 
     // Method to display the current user's accounts
@@ -63,7 +60,6 @@ public class AccountDisplay {
         displayAccounts.setText(accountsInfo.toString()); // Setting text to JLabel
 
     }
-
 
 
 
