@@ -1,5 +1,8 @@
 package org.example;
 
+import org.w3c.dom.ls.LSOutput;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +34,6 @@ public class UserManager {
             }
             return false; // No matching user found
         }
-
 
 
         // Method to get the current user's accounts
@@ -78,6 +80,32 @@ public class UserManager {
         accounts.add(newAccount);
     }
 
+        public void removeAccount(Account accountToRemove) {
+            accounts.remove(accountToRemove);
+        }
+        public int getNextAccountNumber() {
+            int maxAccountNr = 0;
+
+            // Iterate over all users and their accounts
+            for (UserManager user : users) {
+                for (Account account : user.getAccounts()) {
+                    int currentAccountNr = account.getAccountNr();
+                    if (currentAccountNr > maxAccountNr) {
+                        maxAccountNr = currentAccountNr;
+                    }
+                }
+            }
+
+            return maxAccountNr + 1;
+        }
+        public String adminAddAccount(String accountName, double balance) {
+            int nextAccountNr = getNextAccountNumber();
+            Account newAccount = new Account(accountName, nextAccountNr, balance);
+            accounts.add(newAccount);
+            return null;
+        }
+
+
     public static List<UserManager> getUsers() {
         return users;
     }
@@ -90,10 +118,16 @@ public class UserManager {
         public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
             if (currentUser != null) {
                 currentUser.setPassword(newPassword);
-
-
             }
         }
+
+
+        public static void removeUser(UserManager user){
+            users.remove(user);
+        }
+
+
+
 
 
 
@@ -133,26 +167,31 @@ public class UserManager {
             return accountNr;
         }
 
-        public double getBalance() {
-            return balance;
-        }
+
 
         public void withdraw(double amountToTransfer) {
-            // Implementera metoden för uttag här
+
         }
+            // Implementera metoden för uttag här
+            public double getBalance() {
+                return balance;
+            }
+
+
 
         public void deposit(double amountToTransfer) {
             // Implementera metoden för insättning här
         }
     }
 
-    // Statisk block för att skapa användare och deras konton
-    static {
-        UserManager userLars = new UserManager("lars", "111");
-        UserManager userArta = new UserManager("arta", "222");
-        UserManager userMickey = new UserManager("mickey", "333");
-        UserManager userDaniel = new UserManager("daniel", "444");
-        UserManager userAnders = new UserManager("anders", "555");
+        // Static block to initialize users and their accounts
+        static {
+            UserManager userLars = new UserManager("lars", "111");
+            UserManager userArta = new UserManager("arta", "222");
+            UserManager userMickey = new UserManager("mickey", "333");
+            UserManager userDaniel = new UserManager("daniel", "444");
+            UserManager userAnders = new UserManager("anders", "555");
+            UserManager userAdmin = new UserManager("admin", "admin");
 
         userLars.addAccount("Checking", 1, 5000);
         userLars.addAccount("Savings", 2, 6000);
@@ -179,10 +218,20 @@ public class UserManager {
         userAnders.addAccount("Investment Account", 19, 4500);
         userAnders.addAccount("Retirement Account", 20, 500);
 
+        userAdmin.addAccount("Admin Account", 99, 10000000);
+
         addUser(userLars);
         addUser(userArta);
         addUser(userMickey);
         addUser(userDaniel);
         addUser(userAnders);
+
+        addUser(userAdmin);
     }
 }
+
+
+
+
+
+

@@ -65,5 +65,19 @@ public class MainMenu {
                 // Framtida överraskning från "Björnligan"!
             }
         });
+        adminButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Kollar ifall nuvarande användare är "admin". Annars har man inte tillgång till Admin Window.
+                if (UserManager.currentUser != null &&
+                        "admin".equals(UserManager.currentUser.getUsername())) {
+                    // Open the AdminWindow
+                    jFrame.setVisible(false);
+                    new AdminWindow();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Access Denied! Only for Admin!");
+                }
+            }
+        });
     }
 }
