@@ -24,6 +24,7 @@ public class AdminWindow {
     private UserManager selectedUser;
     private String userInfo = "";
     private String accountInfo = "";
+    private String transactionHistory = "";
     private JComboBox<String> userComboBox;
     private UserManager userManager;
 
@@ -130,7 +131,7 @@ public class AdminWindow {
         return null; //Användare hittades inte
     }
 
-    //Visar Användare i Jlist USERS
+    //Visar Användare i TextPane
     private void displayUserInfo(UserManager selectedUser) {
         //Visar användar informationen
         userInfo = "User: " + selectedUser.getUsername() + "\nPassword: " + selectedUser.getPassword();

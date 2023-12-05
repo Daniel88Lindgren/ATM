@@ -1,6 +1,7 @@
 package org.example;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
@@ -16,6 +17,9 @@ public class Transaction {
     private JList<String> list1;
     private JPanel Transaction1;
     private JButton backToMenuButton;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
+    private JComboBox comboBox3;
     private DefaultListModel<String> transactionHistoryListModel = new DefaultListModel<>();
     private JFrame transactionFrame;
 
@@ -35,6 +39,7 @@ public class Transaction {
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
         transactionFrame.setIconImage(icon.getImage());
         list1.setModel(transactionHistoryListModel);
+
     }
 
     private void attachEventHandlers() {
@@ -55,6 +60,8 @@ public class Transaction {
     }
 
     private void performTransfer() {
+        Color successGreen = new Color(30, 130, 76); // En mörkare, dämpad grön
+
         try {
             int sourceAccountNumber = Integer.parseInt(textField1.getText());
             int destinationAccountNumber = Integer.parseInt(textField2.getText());
@@ -73,6 +80,7 @@ public class Transaction {
 
             if (sourceAccount == null || destinationAccount == null) {
                 confirmLabel.setText("Invalid account number(s), please try again");
+                confirmLabel.setForeground(Color.RED);
                 return;
             }
 
@@ -81,11 +89,14 @@ public class Transaction {
                 destinationAccount.deposit(amountToTransfer);
                 addTransactionToHistory(sourceAccountNumber, destinationAccountNumber, amountToTransfer);
                 confirmLabel.setText("You successfully made a transfer");
+                confirmLabel.setForeground(successGreen); // Använder den anpassade gröna färgen
             } else {
                 confirmLabel.setText("You don't have enough money, check your balance!");
+                confirmLabel.setForeground(Color.RED);
             }
         } catch (NumberFormatException ex) {
             confirmLabel.setText("Invalid input! Please enter valid numbers.");
+            confirmLabel.setForeground(Color.RED);
         }
     }
 

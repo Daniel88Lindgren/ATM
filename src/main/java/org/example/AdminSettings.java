@@ -1,6 +1,7 @@
 package org.example;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,7 +11,6 @@ import java.util.List;
 
 public class AdminSettings {
     private JPanel AdminSettings;
-    private JPanel SettingPanel;
     private JPanel AddAccountPanel;
     private JComboBox<String> UserSettingComboBox; // ComboBox to select user
     private JComboBox<String> AccountSettingsComboBox; // ComboBox to select account
@@ -26,12 +26,13 @@ public class AdminSettings {
     private JTextField AdminAddBalanceText; // Input for create account button
     private JLabel UserSettingsLabel;
     private JLabel AccountSettingsLabel;
-    private JLabel RemoveLabel1;
-    private JLabel RemoveLabel2;
     private JLabel AddUserSettingsLabel;
-    private JLabel AddAccountMessage;
-    private JLabel AddUserMessage;
+    private JLabel AddMessage;
     private JLabel RemovedMessage;
+    private JButton changePasswordButton;
+    private JButton changeAccountNrButton;
+    private JTextField NewPasswordText;
+    private JTextField AccountNrNewText;
     private String selectedUsername;
     private String selectedAccount;
     private UserManager userManager;
@@ -46,7 +47,7 @@ public class AdminSettings {
 
         JFrame jFrame = new JFrame("Admin Settings");
         jFrame.setVisible(true);
-        jFrame.setSize(600, 250);
+        jFrame.setSize(700, 300);
         jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         jFrame.setContentPane(AdminSettings);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
@@ -70,6 +71,7 @@ public class AdminSettings {
                 // Uppdatera ComboBox
                 updateComboBoxes();
                 RemovedMessage.setText("User Removed!");
+                RemovedMessage.setForeground(Color.RED);
             }
         });
 
@@ -87,6 +89,8 @@ public class AdminSettings {
                 // Uppdatera alla ComboBoxes
                 updateComboBoxes();
                 RemovedMessage.setText("Account Removed!");
+                RemovedMessage.setForeground(Color.RED);
+
             }
         });
 
@@ -106,7 +110,7 @@ public class AdminSettings {
                     UserManager.addUser(newUser);
                 }
                 //Skriv Meddelande i fönstret och uppdatera combobox
-                AddUserMessage.setText("User Added!");
+                AddMessage.setText("User Added!");
                 updateComboBoxes();
 
             }
@@ -138,7 +142,7 @@ public class AdminSettings {
                     double initialBalance = 0;
                     selectedUser.adminAddAccount(accountName, initialBalance);
                     // Display success message or update UI accordingly
-                    AddAccountMessage.setText("Account Added to: " + selectedUsername + "!");
+                    AddMessage.setText("Account Added to: " + selectedUsername + "!");
                 }
 
             }
@@ -186,6 +190,56 @@ public class AdminSettings {
             public void actionPerformed(ActionEvent e) {
                 jFrame.setVisible(false);
                 new AdminWindow();
+            }
+        });
+        changePasswordButton.addActionListener(new ActionListener() {
+            Color successGreen = new Color(30, 130, 76);
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Välj användare från combobox
+                String selectedUsername = (String) UserSettingComboBox.getSelectedItem();
+
+
+                if (selectedUsername != null && !selectedUsername.isEmpty()) {
+                    // Tar det inskrivna lösenordet från text
+                    String newPassword = NewPasswordText.getText();
+
+                    // Uppdaterar lösenordet hos användaren
+                    updatePasswordForUser(selectedUsername, newPassword);
+
+
+                    NewPasswordText.setText("");
+                    RemovedMessage.setText("Password changed for : " + selectedUsername);
+                    RemovedMessage.setForeground(successGreen);
+
+                }
+            }
+
+            // Metod för att uppdatera användarens lösenord
+            private void updatePasswordForUser(String username, String newPassword) {
+                UserManager userToUpdate = findUserByUsername(username);
+
+                if (userToUpdate != null) {
+                    userToUpdate.setPassword(newPassword);
+
+                }
+            }
+        });
+        changeAccountNrButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get the selected account name from the AccountComboBox
+                String selectedAccountName = (String) AccountSettingsComboBox.getSelectedItem();
+
+                // Get the new account number from the AccountNrNewText field
+                String newAccountNr = AccountNrNewText.getText();
+
+                // Call a method to update the account number for the selected account
+                updateAccountNrForAccount(selectedUsername, selectedAccountName, newAccountNr);
+
+                // Clear the account number text field
+                AccountNrNewText.setText("");
             }
         });
     }
@@ -295,4 +349,36 @@ public class AdminSettings {
         populateAccountComboBox(selectedUsername);
         // Add other update logic as needed
     }
+    private void updateAccountNrForAccount(String username, String accountName, String newAccountNr) {
+        Color successGreen = new Color(30, 130, 76);
+        // Hitta användare
+        UserManager userToUpdate = findUserByUsername(username);
+
+        if (userToUpdate != null) {
+            UserManager.Account accountToUpdate = findAccountForUser(username, accountName);
+
+            if (accountToUpdate != null) {
+                // kolla om kontot redan är taget
+                if (!isAccountNrTaken(userToUpdate, newAccountNr)) {
+                    RemovedMessage.setText("Account Nr Updated!");
+                    RemovedMessage.setForeground(successGreen);
+                    // Om inte är taget, uppdatera
+                    accountToUpdate.setAccountNr(Integer.parseInt(newAccountNr));
+                } else {
+                    // Om upptaget, skicka meddelande.
+                    RemovedMessage.setText("Account number is already taken. Choose a different one.");
+                    RemovedMessage.setForeground(Color.RED);
+                }
+            }
+        }
+    }
+    private boolean isAccountNrTaken(UserManager user, String newAccountNr) {
+        for (UserManager.Account account : user.getAccounts()) {
+            if (account.getAccountNr() == Integer.parseInt(newAccountNr)) {
+                return true; // Account number is already taken
+            }
+        }
+        return false; // Account number is not taken
+    }
+
 }

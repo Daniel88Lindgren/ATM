@@ -52,6 +52,7 @@ public class UserManager {
         // Lägg till den nya användaren i listan över användare
     }
 
+
     public String getUsername() {
         return username;
     }
@@ -121,6 +122,7 @@ public class UserManager {
     }
 
 
+
     public static void removeUser(UserManager user) {
         users.remove(user);
     }
@@ -146,6 +148,10 @@ public class UserManager {
         private String accountName;
         private int accountNr;
         private double balance;
+
+        public void setAccountNr(int accountNr) {
+            this.accountNr = accountNr;
+        }
 
         public Account(String accountName, int accountNr, double balance) {
             this.accountName = accountName;
@@ -191,27 +197,27 @@ public class UserManager {
         userLars.addAccount("Investment", 3, 7000);
         userLars.addAccount("Retirement", 4, 10000);
 
-        userArta.addAccount("Checking Account", 5, 3000);
-        userArta.addAccount("Savings Account", 6, 8000);
-        userArta.addAccount("Investment Account", 7, 7500);
-        userArta.addAccount("Retirement Account", 8, 100000);
+        userArta.addAccount("Checking", 5, 3000);
+        userArta.addAccount("Savings", 6, 8000);
+        userArta.addAccount("Investment", 7, 7500);
+        userArta.addAccount("Retirement", 8, 100000);
 
-        userMickey.addAccount("Checking Account", 9, 1000);
-        userMickey.addAccount("Savings Account", 10, 3000);
-        userMickey.addAccount("Investment Account", 11, 4500);
-        userMickey.addAccount("Retirement Account", 12, 3300);
+        userMickey.addAccount("Checking", 9, 1000);
+        userMickey.addAccount("Savings", 10, 3000);
+        userMickey.addAccount("Investment", 11, 4500);
+        userMickey.addAccount("Retirement", 12, 3300);
 
-        userDaniel.addAccount("Checking Account", 13, 9300);
-        userDaniel.addAccount("Savings Account", 14, 27000);
-        userDaniel.addAccount("Investment Account", 15, 77000);
-        userDaniel.addAccount("Retirement Account", 16, 1000000);
+        userDaniel.addAccount("Checking", 13, 9300);
+        userDaniel.addAccount("Savings", 14, 27000);
+        userDaniel.addAccount("Investment", 15, 77000);
+        userDaniel.addAccount("Retirement", 16, 1000000);
 
-        userAnders.addAccount("Checking Account", 17, 2000);
-        userAnders.addAccount("Savings Account", 18, 99000);
-        userAnders.addAccount("Investment Account", 19, 4500);
-        userAnders.addAccount("Retirement Account", 20, 500);
+        userAnders.addAccount("Checking", 17, 2000);
+        userAnders.addAccount("Savings", 18, 99000);
+        userAnders.addAccount("Investment", 19, 4500);
+        userAnders.addAccount("Retirement", 20, 500);
 
-        userAdmin.addAccount("Admin Account", 99, 10000000);
+        userAdmin.addAccount("Admin", 99, 10000000);
 
         addUser(userLars);
         addUser(userArta);
