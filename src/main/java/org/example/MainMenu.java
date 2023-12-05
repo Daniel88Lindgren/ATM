@@ -63,6 +63,12 @@ public class MainMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Framtida överraskning från "Björnligan"!
+                try {
+                    jFrame.setVisible(false);
+                    new BeagleBoys();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         adminButton.addActionListener(new ActionListener() {
