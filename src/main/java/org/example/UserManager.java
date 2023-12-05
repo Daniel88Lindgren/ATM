@@ -36,23 +36,20 @@ public class UserManager {
         }
 
 
-        // Method to get the current user's accounts
-        public static List<Account> getCurrentUserAccounts() {
-            if (currentUser != null) {
-                return currentUser.getAccounts();
-            } else {
-                return new ArrayList<>(); // Return an empty list if no user is logged in. Denna kan nog tas bort då någon alltid är inloggad
-            }
+    // Method to get the current user's accounts
+    public static List<Account> getCurrentUserAccounts() {
+        if (currentUser != null) {
+            return currentUser.getAccounts();
+        } else {
+            return new ArrayList<>(); // Return an empty list if no user is logged in. Denna kan nog tas bort då någon alltid är inloggad
         }
-
-
-
+    }
 
 
     public UserManager(String username, String password) {
         this.username = username;
         this.password = password;
-        users.add(this); // Lägg till den nya användaren i listan över användare
+        // Lägg till den nya användaren i listan över användare
     }
 
     public String getUsername() {
@@ -80,30 +77,32 @@ public class UserManager {
         accounts.add(newAccount);
     }
 
-        public void removeAccount(Account accountToRemove) {
-            accounts.remove(accountToRemove);
-        }
-        public int getNextAccountNumber() {
-            int maxAccountNr = 0;
+    public void removeAccount(Account accountToRemove) {
+        accounts.remove(accountToRemove);
+    }
 
-            // Iterate over all users and their accounts
-            for (UserManager user : users) {
-                for (Account account : user.getAccounts()) {
-                    int currentAccountNr = account.getAccountNr();
-                    if (currentAccountNr > maxAccountNr) {
-                        maxAccountNr = currentAccountNr;
-                    }
+    public int getNextAccountNumber() {
+        int maxAccountNr = 0;
+
+        // Iterate over all users and their accounts
+        for (UserManager user : users) {
+            for (Account account : user.getAccounts()) {
+                int currentAccountNr = account.getAccountNr();
+                if (currentAccountNr > maxAccountNr) {
+                    maxAccountNr = currentAccountNr;
                 }
             }
+        }
 
-            return maxAccountNr + 1;
-        }
-        public String adminAddAccount(String accountName, double balance) {
-            int nextAccountNr = getNextAccountNumber();
-            Account newAccount = new Account(accountName, nextAccountNr, balance);
-            accounts.add(newAccount);
-            return null;
-        }
+        return maxAccountNr + 1;
+    }
+
+    public String adminAddAccount(String accountName, double balance) {
+        int nextAccountNr = getNextAccountNumber();
+        Account newAccount = new Account(accountName, nextAccountNr, balance);
+        accounts.add(newAccount);
+        return null;
+    }
 
 
     public static List<UserManager> getUsers() {
@@ -114,22 +113,17 @@ public class UserManager {
         users.add(user);
     }
 
-        //Method for the user to change password
-        public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
-            if (currentUser != null) {
-                currentUser.setPassword(newPassword);
-            }
+    //Method for the user to change password
+    public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
+        if (currentUser != null) {
+            currentUser.setPassword(newPassword);
         }
+    }
 
 
-        public static void removeUser(UserManager user){
-            users.remove(user);
-        }
-
-
-
-
-
+    public static void removeUser(UserManager user) {
+        users.remove(user);
+    }
 
 
     public static UserManager getCurrentUser() {
@@ -168,15 +162,14 @@ public class UserManager {
         }
 
 
-
         public void withdraw(double amountToTransfer) {
 
         }
-            // Implementera metoden för uttag här
-            public double getBalance() {
-                return balance;
-            }
 
+        // Implementera metoden för uttag här
+        public double getBalance() {
+            return balance;
+        }
 
 
         public void deposit(double amountToTransfer) {
@@ -184,14 +177,14 @@ public class UserManager {
         }
     }
 
-        // Static block to initialize users and their accounts
-        static {
-            UserManager userLars = new UserManager("lars", "111");
-            UserManager userArta = new UserManager("arta", "222");
-            UserManager userMickey = new UserManager("mickey", "333");
-            UserManager userDaniel = new UserManager("daniel", "444");
-            UserManager userAnders = new UserManager("anders", "555");
-            UserManager userAdmin = new UserManager("admin", "admin");
+    // Static block to initialize users and their accounts
+    static {
+        UserManager userLars = new UserManager("lars", "111");
+        UserManager userArta = new UserManager("arta", "222");
+        UserManager userMickey = new UserManager("mickey", "333");
+        UserManager userDaniel = new UserManager("daniel", "444");
+        UserManager userAnders = new UserManager("anders", "555");
+        UserManager userAdmin = new UserManager("admin", "admin");
 
         userLars.addAccount("Checking", 1, 5000);
         userLars.addAccount("Savings", 2, 6000);

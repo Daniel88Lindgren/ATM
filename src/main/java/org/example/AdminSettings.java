@@ -144,6 +144,8 @@ public class AdminSettings {
             }
             // Uppdatera combobox
             updateComboBoxes();
+
+
         });
 
         //Klick tar bort text i textfield.
@@ -183,6 +185,7 @@ public class AdminSettings {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jFrame.setVisible(false);
+                new AdminWindow();
             }
         });
     }
