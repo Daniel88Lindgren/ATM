@@ -38,14 +38,7 @@ public class AdminWindow {
         jFrame.setLocationRelativeTo(null);
 
         userComboBox = new JComboBox<>();
-        userManager = new UserManager("mickey","333");
-        String username = "mickey";
-        String password = "333";
-        if (UserManager.authenticate(username, password)) {
 
-            userManager = UserManager.getCurrentUser();
-
-        }
 
         //Knappfunktion för tillbaka till Main Menu
         AdminMainMenuButton.addActionListener(new ActionListener() {
