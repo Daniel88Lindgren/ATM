@@ -1,6 +1,7 @@
 package org.example;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,53 +11,46 @@ import java.util.List;
 
 public class AdminSettings {
     private JPanel AdminSettings;
-    private JPanel SettingPanel;
     private JPanel AddAccountPanel;
-    private JComboBox<String> UserSettingComboBox; // ComboBox to select user
-    private JComboBox<String> AccountSettingsComboBox; // ComboBox to select account
+    private JComboBox<String> UserSettingComboBox;
+    private JComboBox<String> AccountSettingsComboBox;
     private JComboBox<String> AdminAddAccountComboBox;
-    private JButton deleteUserSettingsButton; // Button to delete selected user
-    private JButton deleteAccountSettingsButton; // Button to delete selected account
-    private JButton AdminCreateUser; // Button to create user
-    private JButton AdminCreateAccount; // Button to create account
+    private JButton deleteUserSettingsButton;
+    private JButton deleteAccountSettingsButton;
+    private JButton AdminCreateUser;
+    private JButton AdminCreateAccount;
     private JButton backSettingsButton;
-    private JTextField usernameTextField; // Input for create user button
-    private JTextField passwordTextField; // Input for create user button
-    private JTextField AdminAddAccountNameText; // Input for create account button
-    private JTextField AdminAddBalanceText; // Input for create account button
+    private JTextField usernameTextField;
+    private JTextField passwordTextField;
+    private JTextField AdminAddAccountNameText;
+    private JTextField AdminAddBalanceText;
     private JLabel UserSettingsLabel;
     private JLabel AccountSettingsLabel;
-    private JLabel RemoveLabel1;
-    private JLabel RemoveLabel2;
     private JLabel AddUserSettingsLabel;
-    private JLabel AddAccountMessage;
-    private JLabel AddUserMessage;
+    private JLabel AddMessageUser;
     private JLabel RemovedMessage;
+    private JButton changePasswordButton;
+    private JButton changeAccountNrButton;
+    private JTextField NewPasswordText;
+    private JTextField AccountNrNewText;
+    private JLabel AddMessageAccount;
     private String selectedUsername;
-    private String selectedAccount;
     private UserManager userManager;
     private JComboBox<String> userComboBox;
-
-
 
     public AdminSettings(UserManager userManager, JComboBox<String> userComboBox) {
         this.userManager = userManager;
         this.userComboBox = userComboBox;
 
-
         JFrame jFrame = new JFrame("Admin Settings");
         jFrame.setVisible(true);
-        jFrame.setSize(600, 250);
+        jFrame.setSize(700, 300);
         jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         jFrame.setContentPane(AdminSettings);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
-
-
-
         initComboBoxes();
-
 
         deleteUserSettingsButton.addActionListener(new ActionListener() {
             @Override
@@ -70,6 +64,7 @@ public class AdminSettings {
                 // Uppdatera ComboBox
                 updateComboBoxes();
                 RemovedMessage.setText("User Removed!");
+                RemovedMessage.setForeground(Color.RED);
             }
         });
 
@@ -86,7 +81,9 @@ public class AdminSettings {
                 selectedUser.removeAccount(selectedAccount);
                 // Uppdatera alla ComboBoxes
                 updateComboBoxes();
-                RemovedMessage.setText("Account Removed!");
+                RemovedMessage.setText("Account Removed: " + selectedUsername + " " + selectedAccountName);
+                RemovedMessage.setForeground(Color.RED);
+
             }
         });
 
@@ -106,9 +103,8 @@ public class AdminSettings {
                     UserManager.addUser(newUser);
                 }
                 //Skriv Meddelande i fönstret och uppdatera combobox
-                AddUserMessage.setText("User Added!");
+                AddMessageUser.setText("User Added!");
                 updateComboBoxes();
-
             }
             //Metod att kolla om användaren finns
             private boolean usernameExists(String username) {
@@ -123,30 +119,36 @@ public class AdminSettings {
         });
 
         AdminCreateAccount.addActionListener(e -> {
-            //Ta vald användare från combobox
+            //hämta vald användare från combobox
             String selectedUsername = (String) AdminAddAccountComboBox.getSelectedItem();
-            //Ta inskrivna användarnamnet från textfield
+            // hämta text för kontonamn
             String accountName = AdminAddAccountNameText.getText();
 
-            //Check så inget fält är tomt.
+            // Kolla så inte fälten är tomma
             if (selectedUsername != null && !selectedUsername.isEmpty() && !accountName.isEmpty()) {
-                //Hitta användare
-                UserManager selectedUser = findUserByUsername(selectedUsername);
-                // Kolla så att användaren finns
-                if (selectedUser != null) {
-                    // Skapa konto till vald användare. med balance 0.
-                    double initialBalance = 0;
-                    selectedUser.adminAddAccount(accountName, initialBalance);
-                    // Display success message or update UI accordingly
-                    AddAccountMessage.setText("Account Added to: " + selectedUsername + "!");
-                }
+                try {
+                    // Hämta balance från text
+                    double initialBalance = Double.parseDouble(AdminAddBalanceText.getText());
 
+                    // Hitta användare
+                    UserManager selectedUser = findUserByUsername(selectedUsername);
+
+                    // Kolla så användaren finns
+                    if (selectedUser != null) {
+                        // Skapa konto för vald användare och inskriven balance
+                        selectedUser.adminAddAccount(accountName, initialBalance);
+
+                        // Visa meddelande
+                        AddMessageAccount.setText("Account Added to: " + selectedUsername + "!");
+                    }
+                } catch (NumberFormatException ex) {
+                    // Hanterar att balance är korrekt inskrivet
+                    AddMessageAccount.setText("Please enter a valid initial balance!");
+                }
             }
-            // Uppdatera combobox
-            updateComboBoxes();
         });
 
-        //Klick tar bort text i textfield.
+        //Klick tar bort text i textfield vid klick.
         AdminAddAccountNameText.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -154,7 +156,7 @@ public class AdminSettings {
                 AdminAddAccountNameText.setText("");
             }
         });
-        //Klick tar bort text i textfield.
+        //Klick tar bort text i textfield vid klick.
         AdminAddBalanceText.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -162,7 +164,7 @@ public class AdminSettings {
                 AdminAddBalanceText.setText("");
             }
         });
-        //Klick tar bort text i textfield.
+        //Klick tar bort text i textfield vid klick.
         usernameTextField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -170,7 +172,7 @@ public class AdminSettings {
                 usernameTextField.setText("");
             }
         });
-        //Klick tar bort text i textfield.
+        //Klick tar bort text i textfield vid klick.
         passwordTextField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -178,11 +180,64 @@ public class AdminSettings {
                 passwordTextField.setText("");
             }
         });
+
         // Tar bort fönstret när man går tillbaka till Admin Window
         backSettingsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jFrame.setVisible(false);
+                new AdminWindow();
+            }
+        });
+
+        //Byta lösenord hos användare
+        changePasswordButton.addActionListener(new ActionListener() {
+            Color successGreen = new Color(30, 130, 76);
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Välj användare från combobox
+                String selectedUsername = (String) UserSettingComboBox.getSelectedItem();
+
+
+                if (selectedUsername != null && !selectedUsername.isEmpty()) {
+                    // Tar det inskrivna lösenordet från text
+                    String newPassword = NewPasswordText.getText();
+
+                    // Uppdaterar lösenordet hos användaren
+                    updatePasswordForUser(selectedUsername, newPassword);
+
+
+                    NewPasswordText.setText("");
+                    RemovedMessage.setText("Password changed for : " + selectedUsername);
+                    RemovedMessage.setForeground(successGreen);
+                }
+            }
+            // Metod för att uppdatera användarens lösenord
+            private void updatePasswordForUser(String username, String newPassword) {
+                UserManager userToUpdate = findUserByUsername(username);
+
+                if (userToUpdate != null) {
+                    userToUpdate.setPassword(newPassword);
+
+                }
+            }
+        });
+
+        //Knapp byta konto
+        changeAccountNrButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Hämta valt konto från combobox
+                String selectedAccountName = (String) AccountSettingsComboBox.getSelectedItem();
+
+                // Hämta nya konto numret från text
+                String newAccountNr = AccountNrNewText.getText();
+
+                // Kallar på metod för att uppdatera konto nr hos valt konto
+                updateAccountNrForAccount(selectedUsername, selectedAccountName, newAccountNr);
+
+                AccountNrNewText.setText("");
             }
         });
     }
@@ -206,13 +261,13 @@ public class AdminSettings {
         AccountSettingsComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Get the selected account name
+                // Hämta valt konto namn
                 String selectedAccountName = (String) AccountSettingsComboBox.getSelectedItem();
-
-                // Display account information based on the selected account name
-                displayAccountInfo(selectedUsername, selectedAccountName);
+                // Visa vilket konto som finns i combobox för vald användare
+                displayAccountName(selectedUsername, selectedAccountName);
             }
         });
+
         //ComboBox för att lägga till användare
         AdminAddAccountComboBox.addActionListener(new ActionListener() {
             @Override
@@ -221,6 +276,7 @@ public class AdminSettings {
             }
         });
     }
+
     //Method för att lägga till användare i USER combobox
     private void populateUserComboBox() {
         List<String> usernames = new ArrayList<>();
@@ -230,6 +286,7 @@ public class AdminSettings {
         DefaultComboBoxModel<String> userModel = new DefaultComboBoxModel<>(usernames.toArray(new String[0]));
         UserSettingComboBox.setModel(userModel);
     }
+
     //Metod för att lägga till USERS i combobox till höger
     private void populateAdminAddComboBox() {
         List<String> usernames = new ArrayList<>();
@@ -239,6 +296,7 @@ public class AdminSettings {
         DefaultComboBoxModel<String> userModel = new DefaultComboBoxModel<>(usernames.toArray(new String[0]));
         AdminAddAccountComboBox.setModel(userModel);
     }
+
     //Metod för att lägga till Konto i Account combobox
     private void populateAccountComboBox(String selectedUsername) {
         if (selectedUsername != null) {
@@ -253,16 +311,14 @@ public class AdminSettings {
             }
         }
     }
-
-    private void displayAccountInfo(String selectedUsername, String selectedAccountName) {
+    //Metod för att visa vald användares konto
+    private void displayAccountName(String selectedUsername, String selectedAccountName) {
         UserManager.Account selectedAccount = findAccountForUser(selectedUsername, selectedAccountName);
         if (selectedAccount != null) {
-            // Update your GUI to display the account information
-            // For example, set labels or update a text area with the account details
-            // Example:
-            // accountInfoTextArea.setText("Account Name: " + selectedAccount.getAccountName() + "\nAccount Number: " + selectedAccount.getAccountNr() + "\nBalance: " + selectedAccount.getBalance());
+
         }
     }
+
     //Metod hitta användare genom Username
     private UserManager findUserByUsername(String username) {
         for (UserManager user : userManager.getUsers()) {
@@ -272,6 +328,7 @@ public class AdminSettings {
         }
         return null;
     }
+
     //Metod hitta konto tillhörande användare
     private UserManager.Account findAccountForUser(String selectedUsername, String selectedAccountName) {
         UserManager selectedUser = findUserByUsername(selectedUsername);
@@ -284,12 +341,47 @@ public class AdminSettings {
         }
         return null;
     }
+
     //Metod uppdaterar comboboxarna efter ändringar
     public void updateComboBoxes() {
-        // Call methods to update ComboBoxes or other components
+        // Kalla metoder som uppdatera comboboxes
         populateUserComboBox();
         populateAdminAddComboBox();
         populateAccountComboBox(selectedUsername);
-        // Add other update logic as needed
+    }
+
+    //Metod för att uppdatera konto nr
+    private void updateAccountNrForAccount(String username, String accountName, String newAccountNr) {
+        Color successGreen = new Color(30, 130, 76);
+        // Hitta användare
+        UserManager userToUpdate = findUserByUsername(username);
+
+        if (userToUpdate != null) {
+            UserManager.Account accountToUpdate = findAccountForUser(username, accountName);
+
+            // kolla om kontot redan är taget
+            if (accountToUpdate != null) {
+                if (!isAccountNrTaken(userToUpdate, newAccountNr)) {
+                    RemovedMessage.setText("Account Nr Updated!");
+                    RemovedMessage.setForeground(successGreen);
+                    // Om inte är taget, uppdatera
+                    accountToUpdate.setAccountNr(Integer.parseInt(newAccountNr));
+                } else {
+                    // Om upptaget, skicka meddelande.
+                    RemovedMessage.setText("Account number is already taken. Choose a different one.");
+                    RemovedMessage.setForeground(Color.RED);
+                }
+            }
+        }
+    }
+    //Metod för att se om konto nr är upptaget
+    private boolean isAccountNrTaken(UserManager user, String newAccountNr) {
+        for (UserManager.Account account : user.getAccounts()) {
+            if (account.getAccountNr() == Integer.parseInt(newAccountNr)) {
+                // Kontot är upptaget
+                return true;
+            }
+        }
+        return false; // Konto nummer ej Upptaget
     }
 }

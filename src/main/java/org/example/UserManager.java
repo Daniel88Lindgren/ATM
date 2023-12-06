@@ -23,8 +23,8 @@ public class UserManager {
             UserManager.currentUser = currentUser;
         }
 
+    // Method to authenticate a user
 
-        // Method to authenticate a user
         public static boolean authenticate(String username, String password) {
             for (UserManager user : users) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
@@ -35,24 +35,22 @@ public class UserManager {
             return false; // No matching user found
         }
 
+    // Method to get the current user's accounts
 
-        // Method to get the current user's accounts
-        public static List<Account> getCurrentUserAccounts() {
-            if (currentUser != null) {
-                return currentUser.getAccounts();
-            } else {
-                return new ArrayList<>(); // Return an empty list if no user is logged in. Denna kan nog tas bort då någon alltid är inloggad
-            }
+    public static List<Account> getCurrentUserAccounts() {
+        if (currentUser != null) {
+            return currentUser.getAccounts();
+        } else {
+            return new ArrayList<>(); // Return an empty list if no user is logged in. Denna kan nog tas bort då någon alltid är inloggad
         }
-
-
-
+    }
 
 
     public UserManager(String username, String password) {
         this.username = username;
         this.password = password;
     }
+
 
     public String getUsername() {
         return username;
@@ -79,30 +77,32 @@ public class UserManager {
         accounts.add(newAccount);
     }
 
-        public void removeAccount(Account accountToRemove) {
-            accounts.remove(accountToRemove);
-        }
-        public int getNextAccountNumber() {
-            int maxAccountNr = 0;
+    public void removeAccount(Account accountToRemove) {
+        accounts.remove(accountToRemove);
+    }
 
-            // Iterate over all users and their accounts
-            for (UserManager user : users) {
-                for (Account account : user.getAccounts()) {
-                    int currentAccountNr = account.getAccountNr();
-                    if (currentAccountNr > maxAccountNr) {
-                        maxAccountNr = currentAccountNr;
-                    }
+    public int getNextAccountNumber() {
+        int maxAccountNr = 0;
+
+        // Iterate over all users and their accounts
+        for (UserManager user : users) {
+            for (Account account : user.getAccounts()) {
+                int currentAccountNr = account.getAccountNr();
+                if (currentAccountNr > maxAccountNr) {
+                    maxAccountNr = currentAccountNr;
                 }
             }
+        }
 
-            return maxAccountNr + 1;
-        }
-        public String adminAddAccount(String accountName, double balance) {
-            int nextAccountNr = getNextAccountNumber();
-            Account newAccount = new Account(accountName, nextAccountNr, balance);
-            accounts.add(newAccount);
-            return null;
-        }
+        return maxAccountNr + 1;
+    }
+
+    public String adminAddAccount(String accountName, double balance) {
+        int nextAccountNr = getNextAccountNumber();
+        Account newAccount = new Account(accountName, nextAccountNr, balance);
+        accounts.add(newAccount);
+        return null;
+    }
 
 
     public static List<UserManager> getUsers() {
@@ -112,23 +112,19 @@ public class UserManager {
     public static void addUser(UserManager user) {
         users.add(user);
     }
+    //Method for the user to change password
 
-        //Method for the user to change password
-        public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
-            if (currentUser != null) {
-                currentUser.setPassword(newPassword);
-            }
+    public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
+        if (currentUser != null) {
+            currentUser.setPassword(newPassword);
         }
-
-
-        public static void removeUser(UserManager user){
-            users.remove(user);
-        }
+    }
 
 
 
-
-
+    public static void removeUser(UserManager user) {
+        users.remove(user);
+    }
 
 
     public static UserManager getCurrentUser() {
@@ -152,6 +148,10 @@ public class UserManager {
         private int accountNr;
         private double balance;
 
+        public void setAccountNr(int accountNr) {
+            this.accountNr = accountNr;
+        }
+
         public Account(String accountName, int accountNr, double balance) {
             this.accountName = accountName;
             this.accountNr = accountNr;
@@ -167,15 +167,14 @@ public class UserManager {
         }
 
 
-
         public void withdraw(double amountToTransfer) {
 
         }
-            // Implementera metoden för uttag här
-            public double getBalance() {
-                return balance;
-            }
 
+        // Implementera metoden för uttag här
+        public double getBalance() {
+            return balance;
+        }
 
 
         public void deposit(double amountToTransfer) {
@@ -183,41 +182,41 @@ public class UserManager {
         }
     }
 
-        // Static block to initialize users and their accounts
-        static {
-            UserManager userLars = new UserManager("lars", "111");
-            UserManager userArta = new UserManager("arta", "222");
-            UserManager userMickey = new UserManager("mickey", "333");
-            UserManager userDaniel = new UserManager("daniel", "444");
-            UserManager userAnders = new UserManager("anders", "555");
-            UserManager userAdmin = new UserManager("admin", "admin");
+    // Static block to initialize users and their accounts
+    static {
+        UserManager userLars = new UserManager("lars", "111");
+        UserManager userArta = new UserManager("arta", "222");
+        UserManager userMickey = new UserManager("mickey", "333");
+        UserManager userDaniel = new UserManager("daniel", "444");
+        UserManager userAnders = new UserManager("anders", "555");
+        UserManager userAdmin = new UserManager("admin", "admin");
 
         userLars.addAccount("Checking", 1, 5000);
         userLars.addAccount("Savings", 2, 6000);
         userLars.addAccount("Investment", 3, 7000);
         userLars.addAccount("Retirement", 4, 10000);
 
-        userArta.addAccount("Checking Account", 5, 3000);
-        userArta.addAccount("Savings Account", 6, 8000);
-        userArta.addAccount("Investment Account", 7, 7500);
-        userArta.addAccount("Retirement Account", 8, 100000);
+        userArta.addAccount("Checking", 5, 3000);
+        userArta.addAccount("Savings", 6, 8000);
+        userArta.addAccount("Investment", 7, 7500);
+        userArta.addAccount("Retirement", 8, 100000);
 
-        userMickey.addAccount("Checking Account", 9, 1000);
-        userMickey.addAccount("Savings Account", 10, 3000);
-        userMickey.addAccount("Investment Account", 11, 4500);
-        userMickey.addAccount("Retirement Account", 12, 3300);
+        userMickey.addAccount("Checking", 9, 1000);
+        userMickey.addAccount("Savings", 10, 3000);
+        userMickey.addAccount("Investment", 11, 4500);
+        userMickey.addAccount("Retirement", 12, 3300);
 
-        userDaniel.addAccount("Checking Account", 13, 9300);
-        userDaniel.addAccount("Savings Account", 14, 27000);
-        userDaniel.addAccount("Investment Account", 15, 77000);
-        userDaniel.addAccount("Retirement Account", 16, 1000000);
+        userDaniel.addAccount("Checking", 13, 9300);
+        userDaniel.addAccount("Savings", 14, 27000);
+        userDaniel.addAccount("Investment", 15, 77000);
+        userDaniel.addAccount("Retirement", 16, 1000000);
 
-        userAnders.addAccount("Checking Account", 17, 2000);
-        userAnders.addAccount("Savings Account", 18, 99000);
-        userAnders.addAccount("Investment Account", 19, 4500);
-        userAnders.addAccount("Retirement Account", 20, 500);
+        userAnders.addAccount("Checking", 17, 2000);
+        userAnders.addAccount("Savings", 18, 99000);
+        userAnders.addAccount("Investment", 19, 4500);
+        userAnders.addAccount("Retirement", 20, 500);
 
-        userAdmin.addAccount("Admin Account", 99, 10000000);
+        userAdmin.addAccount("Admin", 99, 10000000);
 
         addUser(userLars);
         addUser(userArta);

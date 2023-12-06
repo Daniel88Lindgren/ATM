@@ -3,9 +3,6 @@ package org.example;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -21,13 +18,16 @@ public class AdminWindow {
     private JLabel AccountLabel;
     private JLabel InformationLabel;
     private JLabel UsersLabel;
-    private UserManager selectedUser;
     private String userInfo = "";
     private String accountInfo = "";
+    private String transactionInfo = "";
     private JComboBox<String> userComboBox;
+    private UserManager selectedUser;
     private UserManager userManager;
 
     public AdminWindow() {
+        this.userManager = selectedUser;
+
         JFrame jFrame = new JFrame("Admin Window");
         jFrame.setVisible(true);
         jFrame.setSize(500, 500);
@@ -38,23 +38,8 @@ public class AdminWindow {
         jFrame.setLocationRelativeTo(null);
 
         userComboBox = new JComboBox<>();
-        userManager = new UserManager("mickey","333");
-        String username = "mickey";
-        String password = "333";
-        if (UserManager.authenticate(username, password)) {
+        this.userManager = userManager;
 
-            userManager = UserManager.getCurrentUser();
-
-        }
-
-        //Knappfunktion för tillbaka till Main Menu
-        AdminMainMenuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jFrame.setVisible(false);
-                new MainMenu();
-            }
-        });
 
         //Skapar listan med användare, baserat på användarnamnet
         List<UserManager> users = UserManager.getUsers();
@@ -89,21 +74,24 @@ public class AdminWindow {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting() && selectedUser != null) {
-
                     String selectedAccountName = (String) AccountSelection.getSelectedValue();
                     if (selectedAccountName != null) {
                         UserManager.Account selectedAccount = findAccountByName(selectedUser, selectedAccountName);
                         if (selectedAccount != null) {
                             displayAccountInfo(selectedAccount);
+                            List<String> transactionHistory = selectedUser.getTransactionHistory(); // Use UserManager instance
+                            displayTransactionInfo(transactionHistory);
                         }
                     }
                 }
             }
         });
 
+
         settingsAdmin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                jFrame.setVisible(false);
                 new AdminSettings(selectedUser, userComboBox);
             }
         });
@@ -136,10 +124,12 @@ public class AdminWindow {
         return null; //Användare hittades inte
     }
 
-    //Visar Användare i Jlist USERS
+    //Visar Användare i TextPane
     private void displayUserInfo(UserManager selectedUser) {
         //Visar användar informationen
-        userInfo = "User: " + selectedUser.getUsername() + "\nPassword: " + selectedUser.getPassword();
+        userInfo = "User Information:"
+                + "\nUser: " + selectedUser.getUsername()
+                + "\nPassword: " + selectedUser.getPassword() + "\n";
 
         //När man väljer ny användare så nollas displayAccountInfo
         accountInfo = "";
@@ -151,12 +141,24 @@ public class AdminWindow {
     //Visar kontoinformationen i JList ACCOUNT
     private void displayAccountInfo(UserManager.Account selectedAccount) {
         //Visar kontoinformationen
-        accountInfo = "\nAccount Name: " + selectedAccount.getAccountName()
+        accountInfo =
+                "\n" + "Account Information:"
+                + "\nAccount Name: " + selectedAccount.getAccountName()
                 + "\nAccount Number: " + selectedAccount.getAccountNr()
                 + "\nBalance: " + selectedAccount.getBalance();
 
         //Visar Användarinformation och kontoinformation
         InformationText.setText(userInfo + accountInfo);
+    }
+
+    private void displayTransactionInfo(List<String> transactionHistory) {
+        StringBuilder transactionInfo = new StringBuilder("\n" + "\nTransactions:");
+
+        for (String transactionRecord : transactionHistory) {
+            transactionInfo.append("\n").append(transactionRecord).append("\n");
+        }
+
+        InformationText.setText(userInfo + accountInfo + transactionInfo.toString());
     }
 
     //Metod för att koppla rätt konto till rätt namn
@@ -168,4 +170,5 @@ public class AdminWindow {
         }
         return null; // Konto hittades inte
     }
+
 }
