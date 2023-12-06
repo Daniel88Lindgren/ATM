@@ -17,9 +17,10 @@ public class Transaction {
     private JList<String> list1;
     private JPanel Transaction1;
     private JButton backToMenuButton;
+
     private JComboBox comboBox1;
     private JComboBox comboBox2;
-    private JComboBox comboBox3;
+
     private DefaultListModel<String> transactionHistoryListModel = new DefaultListModel<>();
     private JFrame transactionFrame;
 

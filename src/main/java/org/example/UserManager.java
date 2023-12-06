@@ -166,29 +166,31 @@ public class UserManager {
             return accountNr;
         }
 
-
-        public void withdraw(double amountToTransfer) {
-
-        }
-
-        // Implementera metoden för uttag här
         public double getBalance() {
             return balance;
         }
 
+        public void withdraw(double amount) {
+            if (this.balance >= amount) {
+                this.balance -= amount;
+            } else {
+                throw new IllegalArgumentException("Insufficient funds");
+            }
+        }
         public void setAccountName(String accountName) {
             this.accountName = accountName;
         }
 
 
+        public void deposit(double amount) {
+            this.balance += amount;
+        }
 
         public void setBalance(double balance) {
             this.balance = balance;
         }
 
-        public void deposit(double amountToTransfer) {
-            // Implementera metoden för insättning här
-        }
+
     }
 
     // Static block to initialize users and their accounts
