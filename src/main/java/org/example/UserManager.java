@@ -23,8 +23,8 @@ public class UserManager {
             UserManager.currentUser = currentUser;
         }
 
+    // Method to authenticate a user
 
-        // Method to authenticate a user
         public static boolean authenticate(String username, String password) {
             for (UserManager user : users) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
@@ -35,8 +35,8 @@ public class UserManager {
             return false; // No matching user found
         }
 
-
     // Method to get the current user's accounts
+
     public static List<Account> getCurrentUserAccounts() {
         if (currentUser != null) {
             return currentUser.getAccounts();
@@ -113,8 +113,8 @@ public class UserManager {
     public static void addUser(UserManager user) {
         users.add(user);
     }
-
     //Method for the user to change password
+
     public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
         if (currentUser != null) {
             currentUser.setPassword(newPassword);
