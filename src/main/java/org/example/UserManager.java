@@ -176,6 +176,15 @@ public class UserManager {
             return balance;
         }
 
+        public void setAccountName(String accountName) {
+            this.accountName = accountName;
+        }
+
+
+
+        public void setBalance(double balance) {
+            this.balance = balance;
+        }
 
         public void deposit(double amountToTransfer) {
             // Implementera metoden för insättning här
