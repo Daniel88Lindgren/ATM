@@ -88,6 +88,14 @@ public class AdminWindow {
         });
 
 
+        AdminMainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jFrame.setVisible(false);
+                new MainMenu();
+            }
+        });
+
         settingsAdmin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,6 +103,7 @@ public class AdminWindow {
                 new AdminSettings(selectedUser, userComboBox);
             }
         });
+
     }
 
     //Uppdaterar kontolistan när man väljer en ny användare
