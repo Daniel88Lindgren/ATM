@@ -52,6 +52,12 @@ public class UserManager {
     }
 
 
+    public static void clearCurrentUserAccounts() {
+        if (currentUser != null) {
+            currentUser.getAccounts().clear();
+        }
+    }
+
     public String getUsername() {
         return username;
     }
