@@ -52,7 +52,6 @@ public class UserManager {
     public UserManager(String username, String password) {
         this.username = username;
         this.password = password;
-        users.add(this); // Lägg till den nya användaren i listan över användare
     }
 
     public String getUsername() {
