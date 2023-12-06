@@ -52,7 +52,6 @@ public class UserManager {
     public UserManager(String username, String password) {
         this.username = username;
         this.password = password;
-        users.add(this); // Lägg till den nya användaren i listan över användare
     }
 
     public String getUsername() {
@@ -167,20 +166,20 @@ public class UserManager {
             return accountNr;
         }
 
-
-
-        public void withdraw(double amountToTransfer) {
-
+        public double getBalance() {
+            return balance;
         }
-            // Implementera metoden för uttag här
-            public double getBalance() {
-                return balance;
+
+        public void withdraw(double amount) {
+            if (this.balance >= amount) {
+                this.balance -= amount;
+            } else {
+                throw new IllegalArgumentException("Insufficient funds");
             }
+        }
 
-
-
-        public void deposit(double amountToTransfer) {
-            // Implementera metoden för insättning här
+        public void deposit(double amount) {
+            this.balance += amount;
         }
     }
 
