@@ -28,6 +28,7 @@ public class MainMenu {
         paymentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                jFrame.setVisible(false);
                 new PaymentWindow();
 
             }

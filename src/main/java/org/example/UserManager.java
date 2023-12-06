@@ -177,7 +177,17 @@ public class UserManager {
                 return balance;
             }
 
+        public void setAccountName(String accountName) {
+            this.accountName = accountName;
+        }
 
+        public void setAccountNr(int accountNr) {
+            this.accountNr = accountNr;
+        }
+
+        public void setBalance(double balance) {
+            this.balance = balance;
+        }
 
         public void deposit(double amountToTransfer) {
             // Implementera metoden för insättning här
