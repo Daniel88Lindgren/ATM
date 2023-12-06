@@ -55,6 +55,12 @@ public class UserManager {
         users.add(this); // Lägg till den nya användaren i listan över användare
     }
 
+    public static void clearCurrentUserAccounts() {
+        if (currentUser != null) {
+            currentUser.getAccounts().clear();
+        }
+    }
+
     public String getUsername() {
         return username;
     }
@@ -181,7 +187,11 @@ public class UserManager {
 
         public void deposit(double amountToTransfer) {
             // Implementera metoden för insättning här
+
         }
+
+
+
     }
 
         // Static block to initialize users and their accounts

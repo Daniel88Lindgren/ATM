@@ -38,6 +38,7 @@ public class BeagleBoys {
             public void actionPerformed(ActionEvent e) {
                 try {
                     frame.setVisible(false);
+                    UserManager.clearCurrentUserAccounts();
                     new MainMenu();
                 } catch (Exception ex) {
                     ex.printStackTrace();
