@@ -16,7 +16,6 @@ public class PaymentWindow {
     private JButton backToMenuButton;
     private JTable Paymenthistorytable;
     private JList usersAccounts;
-    private JButton viewPaidBills;
     private JLabel labelToFill1;
     private JLabel labelToFill2;
     private DefaultTableModel paymentHistoryModel;
