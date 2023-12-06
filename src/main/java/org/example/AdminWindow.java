@@ -127,7 +127,9 @@ public class AdminWindow {
     //Visar Användare i TextPane
     private void displayUserInfo(UserManager selectedUser) {
         //Visar användar informationen
-        userInfo = "User: " + selectedUser.getUsername() + "\nPassword: " + selectedUser.getPassword() + "\n";
+        userInfo = "User Information:"
+                + "\nUser: " + selectedUser.getUsername()
+                + "\nPassword: " + selectedUser.getPassword() + "\n";
 
         //När man väljer ny användare så nollas displayAccountInfo
         accountInfo = "";
@@ -139,7 +141,9 @@ public class AdminWindow {
     //Visar kontoinformationen i JList ACCOUNT
     private void displayAccountInfo(UserManager.Account selectedAccount) {
         //Visar kontoinformationen
-        accountInfo = "\nAccount Name: " + selectedAccount.getAccountName()
+        accountInfo =
+                "\n" + "Account Information:"
+                + "\nAccount Name: " + selectedAccount.getAccountName()
                 + "\nAccount Number: " + selectedAccount.getAccountNr()
                 + "\nBalance: " + selectedAccount.getBalance();
 
@@ -148,10 +152,10 @@ public class AdminWindow {
     }
 
     private void displayTransactionInfo(List<String> transactionHistory) {
-        StringBuilder transactionInfo = new StringBuilder("\n" + "\nTransactions:\n");
+        StringBuilder transactionInfo = new StringBuilder("\n" + "\nTransactions:");
 
         for (String transactionRecord : transactionHistory) {
-            transactionInfo.append(" - ").append(transactionRecord).append("\n");
+            transactionInfo.append("\n").append(transactionRecord).append("\n");
         }
 
         InformationText.setText(userInfo + accountInfo + transactionInfo.toString());
