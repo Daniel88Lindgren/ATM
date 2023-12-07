@@ -14,6 +14,7 @@ public class Account {
     private JButton createNewAccountButton;
 
 
+    //Menu for users account
     public Account() {
 
 

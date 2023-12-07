@@ -29,13 +29,13 @@ public class AccountDisplay {
         accountDisplayFrame.setLocationRelativeTo(null);
 
 
-        displayUserAccounts(); // Method call to display accounts
+        displayUserAccounts(); //Call method to display accounts
 
 
 
 
 
-
+        //Back to account menu
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

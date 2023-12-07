@@ -23,7 +23,7 @@ public class PasswordChangeByUser {
         PasswordChangeByUserFrame.setLocationRelativeTo(null);
 
 
-
+        //Back to account menu
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -33,6 +33,7 @@ public class PasswordChangeByUser {
             }
         });
 
+        //User enters new password and press Ok
         applyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,7 +45,7 @@ public class PasswordChangeByUser {
     }
 
 
-    //Method to change password for the current logged in user
+    //Method to change password for the current logged-in user
     public void changePassword() {
         String newPassword = enterNewPasswordTextField.getText();
         if (newPassword != null && !newPassword.trim().isEmpty()) {

@@ -183,6 +183,7 @@ public class PaymentWindow {
 
 
         //Conditions to not proceed payment
+
         if (bill == null) {
             JOptionPane.showMessageDialog(frame, "Invalid OCR Number", "Error", JOptionPane.ERROR_MESSAGE);
             return;
