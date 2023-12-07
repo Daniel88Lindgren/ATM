@@ -55,15 +55,15 @@ public class PaymentWindow {
         Paymenthistorytable.setModel(paymentHistoryModel);
 
 
+        //Calling method
+        populateAccountList();
+
 
         // Generate and display bills
-        bills = generateBills(); // Generate and store bills
+        bills = generateBills();
         for (Bill bill : bills) {
             paymentHistoryModel.addRow(new Object[]{bill.getOcrNumber(), bill.getAmount()});
         }
-
-
-
 
 
         PaymentButton.addActionListener(new ActionListener() {
@@ -80,9 +80,6 @@ public class PaymentWindow {
                 new MainMenu();
             }
         });
-
-        populateAccountList();
-
 
 
 
@@ -165,7 +162,7 @@ public class PaymentWindow {
         List<UserManager.Account> accounts = UserManager.getCurrentUserAccounts();
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        if (accounts.isEmpty()) {
+        if (accounts.isEmpty()) {//This is if admin deletes all account to prevent program crash
             listModel.addElement("No accounts available");
         } else {
             for (UserManager.Account account : accounts) {
@@ -173,6 +170,7 @@ public class PaymentWindow {
             }
         }
 
+        // Set the model to the JList to display the accounts
         usersAccounts.setModel(listModel);
     }
 
@@ -183,6 +181,8 @@ public class PaymentWindow {
         String ocrNumber = ocrNumberField.getText();
         Bill bill = findBillByOCRNumber(ocrNumber);
 
+
+        //Conditions to not proceed payment
         if (bill == null) {
             JOptionPane.showMessageDialog(frame, "Invalid OCR Number", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -208,7 +208,7 @@ public class PaymentWindow {
             return;
         }
 
-
+        //Accepted payment below
 
 
         // Deduct the bill amount from the account balance
@@ -216,7 +216,6 @@ public class PaymentWindow {
 
         // Set the current date as the payment date
         bill.setPaymentDate(new Date());
-
 
         // Remove the paid bill from the list
         bills.remove(bill);
@@ -232,13 +231,17 @@ public class PaymentWindow {
         addPaymentToHistory(bill);
     }
 
+
+    //Method to add users payment history
     private void addPaymentToHistory(Bill bill) {
         String record = bill.getPaymentDate() + " - Paid " + bill.getAmount() + " for OCR " + bill.getOcrNumber();
         paymentHistoryListModel.addElement(record);
-        UserManager.getCurrentUser().addPaymentRecord(record); // Assuming UserManager can store this
+        //Add payment record to the current user's payment history in the UserManager.
+        UserManager.getCurrentUser().addPaymentRecord(record);
     }
 
 
+    //Method to receive and format the payment history for the current logged-in user
     private String getFormattedPaymentHistory() {
         StringBuilder historyBuilder = new StringBuilder();
         UserManager currentUser = UserManager.getCurrentUser();
@@ -259,7 +262,7 @@ public class PaymentWindow {
 
 
 
-    // Helper method to extract the account number from the selected string
+    //Method to extract the account number from the selected string
     private int extractAccountNumber(String accountStr) {
         try {
             return Integer.parseInt(accountStr.split(" ")[0]);
@@ -280,8 +283,10 @@ public class PaymentWindow {
         return null; // Return null if no matching account is found
     }
 
+    //Method to refresh payment history in the table.
+    //Clears existing rows in the payment history table and repopulates it with the current set of bills
     private void refreshPaymentHistoryTable() {
-        paymentHistoryModel.setRowCount(0); // Clear the existing rows
+        paymentHistoryModel.setRowCount(0);
         for (Bill bill : bills) {
             paymentHistoryModel.addRow(new Object[]{bill.getOcrNumber(), bill.getAmount()});
         }

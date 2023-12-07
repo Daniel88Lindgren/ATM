@@ -17,30 +17,18 @@ public class UserManager {
     private static UserManager currentUser;
 
 
+    //List for paid bills
+    private List<String> paymentHistory = new ArrayList<>();
 
-
-    ////////////////////////////////////////////////
-    private List<String> paymentHistory = new ArrayList<>(); // List for payment history
-
-
-    // Method to add a payment record
+    // Adds a payment record to the payment history
     public void addPaymentRecord(String record) {
         paymentHistory.add(record);
     }
 
-    // Method to get payment history
+    // Gets payment history
     public List<String> getPaymentHistory() {
         return paymentHistory;
     }
-
-    // Method to clear payment history
-    public void clearPaymentHistory() {
-        paymentHistory.clear();
-    }
-    ////////////////////////////////////////////////
-
-
-
 
 
 
@@ -143,9 +131,9 @@ public class UserManager {
     public static void addUser(UserManager user) {
         users.add(user);
     }
-    //Method for the user to change password
 
-    public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
+    //Method for the user to change password
+    public static void updateCurrentUserPassword(String newPassword) {
         if (currentUser != null) {
             currentUser.setPassword(newPassword);
         }
@@ -170,9 +158,7 @@ public class UserManager {
         return transactionHistory;
     }
 
-    public void clearTransactionHistory() {
-        transactionHistory.clear(); // Rensa transaktionshistorik när användaren loggar ut
-    }
+
 
     public class Account {
         private String accountName;
