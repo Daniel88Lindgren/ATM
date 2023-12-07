@@ -18,6 +18,7 @@ public class PaymentWindow {
     private JList usersAccounts;
     private JLabel labelToFill1;
     private JLabel labelToFill2;
+    private JButton paymentHistoryButton;
     private DefaultTableModel paymentHistoryModel;
     private JFrame frame;
 
@@ -27,27 +28,13 @@ public class PaymentWindow {
     // List to store generated bills
     private List<Bill> bills;
 
-    // List to store paid bills
-    private List<Bill> paidBills;
+    //List history for paid bills
+    private final DefaultListModel<String> paymentHistoryListModel = new DefaultListModel<>();
 
 
-    public List<Bill> getPaidBills() {
-        return paidBills;
-    }
-
-    public void setPaidBills(List<Bill> paidBills) {
-        this.paidBills = paidBills;
-    }
 
     public PaymentWindow() {
 
-
-
-        // Initialize the paid bills list
-        paidBills = new ArrayList<>();
-
-        // Set the currentUserManager
-        this.currentUserManager = getCurrentUserManager();
 
 
 
@@ -68,11 +55,13 @@ public class PaymentWindow {
         Paymenthistorytable.setModel(paymentHistoryModel);
 
 
+
         // Generate and display bills
         bills = generateBills(); // Generate and store bills
         for (Bill bill : bills) {
             paymentHistoryModel.addRow(new Object[]{bill.getOcrNumber(), bill.getAmount()});
         }
+
 
 
 
@@ -96,17 +85,22 @@ public class PaymentWindow {
 
 
 
+
+        paymentHistoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Initialize the payment history list
+                String history = getFormattedPaymentHistory();
+                JOptionPane.showMessageDialog(frame, history, "Payment History", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+        });
     }
 
-
-    // Method to retrieve the current user's UserManager instance
-    private static UserManager getCurrentUserManager() {
-        return UserManager.getCurrentUser(); // Assuming there is a method to get the current user
-    }
 
 
     //Pre-added bills with OSC number and amount
-    private List<Bill> generateBills() {
+    public List<Bill> generateBills() {
         List<Bill> bills = new ArrayList<>();
         bills.add(new Bill("1122", 5999));
         bills.add(new Bill("3322", 8999));
@@ -121,7 +115,7 @@ public class PaymentWindow {
     }
 
 
-    private class Bill {
+    public static class Bill {
         private String ocrNumber;
         private double amount;
         private Date paymentDate;
@@ -223,8 +217,6 @@ public class PaymentWindow {
         // Set the current date as the payment date
         bill.setPaymentDate(new Date());
 
-        // Add the paid bill to the paid bills list
-        paidBills.add(bill);
 
         // Remove the paid bill from the list
         bills.remove(bill);
@@ -235,6 +227,33 @@ public class PaymentWindow {
         // Display a success message
         JOptionPane.showMessageDialog(frame, "Payment of " + bill.getAmount() + " was successful", "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
         ocrNumberField.setText("");
+
+        // Record the payment
+        addPaymentToHistory(bill);
+    }
+
+    private void addPaymentToHistory(Bill bill) {
+        String record = bill.getPaymentDate() + " - Paid " + bill.getAmount() + " for OCR " + bill.getOcrNumber();
+        paymentHistoryListModel.addElement(record);
+        UserManager.getCurrentUser().addPaymentRecord(record); // Assuming UserManager can store this
+    }
+
+
+    private String getFormattedPaymentHistory() {
+        StringBuilder historyBuilder = new StringBuilder();
+        UserManager currentUser = UserManager.getCurrentUser();
+        if (currentUser != null) {
+            List<String> history = currentUser.getPaymentHistory();
+            if (history.isEmpty()) {
+                return "No payment history available.";
+            }
+            for (String record : history) {
+                historyBuilder.append(record).append("\n");
+            }
+        } else {
+            historyBuilder.append("No user is currently logged in.");
+        }
+        return historyBuilder.toString();
     }
 
 

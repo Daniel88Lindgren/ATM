@@ -104,6 +104,14 @@
           <text value=""/>
         </properties>
       </component>
+      <component id="cddae" class="javax.swing.JButton" binding="paymentHistoryButton" default-binding="true">
+        <constraints>
+          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Payment history"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

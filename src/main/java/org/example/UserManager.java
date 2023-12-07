@@ -19,6 +19,31 @@ public class UserManager {
 
 
 
+    ////////////////////////////////////////////////
+    private List<String> paymentHistory = new ArrayList<>(); // List for payment history
+
+
+    // Method to add a payment record
+    public void addPaymentRecord(String record) {
+        paymentHistory.add(record);
+    }
+
+    // Method to get payment history
+    public List<String> getPaymentHistory() {
+        return paymentHistory;
+    }
+
+    // Method to clear payment history
+    public void clearPaymentHistory() {
+        paymentHistory.clear();
+    }
+    ////////////////////////////////////////////////
+
+
+
+
+
+
         public static void setCurrentUser(UserManager currentUser) {
             UserManager.currentUser = currentUser;
         }
