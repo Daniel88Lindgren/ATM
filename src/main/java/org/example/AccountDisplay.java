@@ -18,6 +18,7 @@ public class AccountDisplay {
     public AccountDisplay() {
 
 
+        // Initialize GUI components
 
         JFrame accountDisplayFrame = new JFrame("Your account info");
         accountDisplayFrame.setVisible(true);
@@ -29,13 +30,14 @@ public class AccountDisplay {
         accountDisplayFrame.setLocationRelativeTo(null);
 
 
-        displayUserAccounts(); // Method call to display accounts
+        //Call method to display accounts
+        displayUserAccounts();
 
 
 
 
 
-
+        //Back to account menu
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

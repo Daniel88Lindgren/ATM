@@ -10,7 +10,6 @@ import java.util.List;
 
 public class PaymentWindow {
     private JPanel Payment1;
-    private JTextField FromAccountField;
     private JTextField ocrNumberField;
     private JButton PaymentButton;
     private JButton backToMenuButton;
@@ -18,39 +17,24 @@ public class PaymentWindow {
     private JList usersAccounts;
     private JLabel labelToFill1;
     private JLabel labelToFill2;
+    private JButton paymentHistoryButton;
     private DefaultTableModel paymentHistoryModel;
     private JFrame frame;
 
 
-    private UserManager currentUserManager;
-
     // List to store generated bills
     private List<Bill> bills;
 
-    // List to store paid bills
-    private List<Bill> paidBills;
+    //List history for paid bills
+    private final DefaultListModel<String> paymentHistoryListModel = new DefaultListModel<>();
 
 
-    public List<Bill> getPaidBills() {
-        return paidBills;
-    }
-
-    public void setPaidBills(List<Bill> paidBills) {
-        this.paidBills = paidBills;
-    }
 
     public PaymentWindow() {
 
 
 
-        // Initialize the paid bills list
-        paidBills = new ArrayList<>();
-
-        // Set the currentUserManager
-        this.currentUserManager = getCurrentUserManager();
-
-
-
+        // Initialize GUI components
         frame = new JFrame("Payment Window");
         frame.setContentPane(Payment1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -68,15 +52,17 @@ public class PaymentWindow {
         Paymenthistorytable.setModel(paymentHistoryModel);
 
 
+        //Calling method
+        populateAccountList();
+
+
         // Generate and display bills
-        bills = generateBills(); // Generate and store bills
+        bills = generateBills();
         for (Bill bill : bills) {
             paymentHistoryModel.addRow(new Object[]{bill.getOcrNumber(), bill.getAmount()});
         }
 
-
-
-
+        //Button to accept bill payment
         PaymentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,6 +70,7 @@ public class PaymentWindow {
             }
         });
 
+        //Button to get back to main menu
         backToMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,21 +79,23 @@ public class PaymentWindow {
             }
         });
 
-        populateAccountList();
 
+        //Button for displaying paid bill history for specific user
+        paymentHistoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Initialize the payment history list
+                String history = getFormattedPaymentHistory();
+                JOptionPane.showMessageDialog(frame, history, "Payment History", JOptionPane.INFORMATION_MESSAGE);
 
-
+            }
+        });
     }
 
-
-    // Method to retrieve the current user's UserManager instance
-    private static UserManager getCurrentUserManager() {
-        return UserManager.getCurrentUser(); // Assuming there is a method to get the current user
-    }
 
 
     //Pre-added bills with OSC number and amount
-    private List<Bill> generateBills() {
+    public List<Bill> generateBills() {
         List<Bill> bills = new ArrayList<>();
         bills.add(new Bill("1122", 5999));
         bills.add(new Bill("3322", 8999));
@@ -121,7 +110,7 @@ public class PaymentWindow {
     }
 
 
-    private class Bill {
+    public static class Bill {
         private String ocrNumber;
         private double amount;
         private Date paymentDate;
@@ -171,7 +160,7 @@ public class PaymentWindow {
         List<UserManager.Account> accounts = UserManager.getCurrentUserAccounts();
         DefaultListModel<String> listModel = new DefaultListModel<>();
 
-        if (accounts.isEmpty()) {
+        if (accounts.isEmpty()) {//This is if admin deletes all account to prevent program crash
             listModel.addElement("No accounts available");
         } else {
             for (UserManager.Account account : accounts) {
@@ -179,6 +168,7 @@ public class PaymentWindow {
             }
         }
 
+        // Set the model to the JList to display the accounts
         usersAccounts.setModel(listModel);
     }
 
@@ -188,6 +178,9 @@ public class PaymentWindow {
     private void handlePayment() {
         String ocrNumber = ocrNumberField.getText();
         Bill bill = findBillByOCRNumber(ocrNumber);
+
+
+        //Conditions to not proceed payment
 
         if (bill == null) {
             JOptionPane.showMessageDialog(frame, "Invalid OCR Number", "Error", JOptionPane.ERROR_MESSAGE);
@@ -214,7 +207,7 @@ public class PaymentWindow {
             return;
         }
 
-
+        //Accepted payment below
 
 
         // Deduct the bill amount from the account balance
@@ -222,9 +215,6 @@ public class PaymentWindow {
 
         // Set the current date as the payment date
         bill.setPaymentDate(new Date());
-
-        // Add the paid bill to the paid bills list
-        paidBills.add(bill);
 
         // Remove the paid bill from the list
         bills.remove(bill);
@@ -235,12 +225,43 @@ public class PaymentWindow {
         // Display a success message
         JOptionPane.showMessageDialog(frame, "Payment of " + bill.getAmount() + " was successful", "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
         ocrNumberField.setText("");
+
+        // Record the payment
+        addPaymentToHistory(bill);
+    }
+
+
+    //Method to add users payment history
+    private void addPaymentToHistory(Bill bill) {
+        String record = bill.getPaymentDate() + " - Paid " + bill.getAmount() + " for OCR " + bill.getOcrNumber();
+        paymentHistoryListModel.addElement(record);
+        //Add payment record to the current user's payment history in the UserManager.
+        UserManager.getCurrentUser().addPaymentRecord(record);
+    }
+
+
+    //Method to receive and format the payment history for the current logged-in user
+    private String getFormattedPaymentHistory() {
+        StringBuilder historyBuilder = new StringBuilder();
+        UserManager currentUser = UserManager.getCurrentUser();
+        if (currentUser != null) {
+            List<String> history = currentUser.getPaymentHistory();
+            if (history.isEmpty()) {
+                return "No payment history available.";
+            }
+            for (String record : history) {
+                historyBuilder.append(record).append("\n");
+            }
+        } else {
+            historyBuilder.append("No user is currently logged in.");
+        }
+        return historyBuilder.toString();
     }
 
 
 
 
-    // Helper method to extract the account number from the selected string
+    //Method to extract the account number from the selected string
     private int extractAccountNumber(String accountStr) {
         try {
             return Integer.parseInt(accountStr.split(" ")[0]);
@@ -261,8 +282,10 @@ public class PaymentWindow {
         return null; // Return null if no matching account is found
     }
 
+    //Method to refresh payment history in the table.
+    //Clears existing rows in the payment history table and repopulates it with the current set of bills
     private void refreshPaymentHistoryTable() {
-        paymentHistoryModel.setRowCount(0); // Clear the existing rows
+        paymentHistoryModel.setRowCount(0);
         for (Bill bill : bills) {
             paymentHistoryModel.addRow(new Object[]{bill.getOcrNumber(), bill.getAmount()});
         }

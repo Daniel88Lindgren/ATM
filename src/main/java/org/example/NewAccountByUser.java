@@ -18,6 +18,7 @@ public class NewAccountByUser {
 
     public NewAccountByUser() {
 
+        // Initialize GUI components
 
         JFrame NewAccountByUserFrame = new JFrame("Create new account");
         NewAccountByUserFrame.setVisible(true);
@@ -29,15 +30,16 @@ public class NewAccountByUser {
         NewAccountByUserFrame.setLocationRelativeTo(null);
 
 
+        //Cancel new account and get back to account menu
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 NewAccountByUserFrame.setVisible(false);
                 new Account();
             }
         });
 
+        //User types in to create new account
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

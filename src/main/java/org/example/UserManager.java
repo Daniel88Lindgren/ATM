@@ -11,51 +11,36 @@ import java.util.List;
 public class UserManager {
     private String username;
     private String password;
+
+    //List for users accounts
     private List<Account> accounts = new ArrayList<>();
     private List<String> transactionHistory = new ArrayList<>(); // Lägg till en lista för att spara transaktionshistorik
+
+    //List for all users
     private static List<UserManager> users = new ArrayList<>();
     private static UserManager currentUser;
 
 
+    //List for paid bills
+    private List<String> paymentHistory = new ArrayList<>();
 
 
-        public static void setCurrentUser(UserManager currentUser) {
+    // Gets payment history
+    public List<String> getPaymentHistory() {
+        return paymentHistory;
+    }
+
+
+    public static void setCurrentUser(UserManager currentUser) {
             UserManager.currentUser = currentUser;
-        }
-
-    // Method to authenticate a user
-
-        public static boolean authenticate(String username, String password) {
-            for (UserManager user : users) {
-                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                    currentUser = user; // Set the current user
-                    return true; // User found and authenticated
-                }
-            }
-            return false; // No matching user found
-        }
-
-    // Method to get the current user's accounts
-
-    public static List<Account> getCurrentUserAccounts() {
-        if (currentUser != null) {
-            return currentUser.getAccounts();
-        } else {
-            return new ArrayList<>(); // Return an empty list if no user is logged in. Denna kan nog tas bort då någon alltid är inloggad
-        }
     }
 
-
-    public UserManager(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public static List<UserManager> getUsers() {
+        return users;
     }
 
-
-    public static void clearCurrentUserAccounts() {
-        if (currentUser != null) {
-            currentUser.getAccounts().clear();
-        }
+    public static void addUser(UserManager user) {
+        users.add(user);
     }
 
     public String getUsername() {
@@ -77,6 +62,58 @@ public class UserManager {
     public List<Account> getAccounts() {
         return accounts;
     }
+
+    public static UserManager getCurrentUser() {
+        return currentUser;
+    }
+
+    public List<String> getTransactionHistory() {
+        return transactionHistory;
+    }
+
+    // Adds a payment record to the payment history
+    public void addPaymentRecord(String record) {
+        paymentHistory.add(record);
+    }
+
+
+
+    // Method to authenticate a user
+        public static boolean authenticate(String username, String password) {
+            for (UserManager user : users) {
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                    currentUser = user; // Set the current user
+                    return true; // User found and authenticated
+                }
+            }
+            return false; // No matching user found
+        }
+
+
+    // Method to get the current user's accounts
+    public static List<Account> getCurrentUserAccounts() {
+        if (currentUser != null) {
+            return currentUser.getAccounts();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+
+    public UserManager(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+
+    public static void clearCurrentUserAccounts() {
+        if (currentUser != null) {
+            currentUser.getAccounts().clear();
+        }
+    }
+
+
+
 
     public void addAccount(String accountName, int accountNr, double balance) {
         Account newAccount = new Account(accountName, accountNr, balance);
@@ -111,16 +148,10 @@ public class UserManager {
     }
 
 
-    public static List<UserManager> getUsers() {
-        return users;
-    }
 
-    public static void addUser(UserManager user) {
-        users.add(user);
-    }
+
     //Method for the user to change password
-
-    public static void updateCurrentUserPassword(String newPassword) {//Kontrollera så att den verkligen ändrar användarens lösenord. currentUser.setPassword(newPassword); borde ha en equal to username och sedan ändra lösenord.
+    public static void updateCurrentUserPassword(String newPassword) {
         if (currentUser != null) {
             currentUser.setPassword(newPassword);
         }
@@ -133,21 +164,15 @@ public class UserManager {
     }
 
 
-    public static UserManager getCurrentUser() {
-        return currentUser;
-    }
+
 
     public void addTransactionRecord(String record) {
         transactionHistory.add(record); // Lägg till transaktionshistorik
     }
 
-    public List<String> getTransactionHistory() {
-        return transactionHistory;
-    }
 
-    public void clearTransactionHistory() {
-        transactionHistory.clear(); // Rensa transaktionshistorik när användaren loggar ut
-    }
+
+
 
     public class Account {
         private String accountName;
