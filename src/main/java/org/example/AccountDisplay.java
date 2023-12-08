@@ -18,6 +18,7 @@ public class AccountDisplay {
     public AccountDisplay() {
 
 
+        // Initialize GUI components
 
         JFrame accountDisplayFrame = new JFrame("Your account info");
         accountDisplayFrame.setVisible(true);
@@ -29,7 +30,8 @@ public class AccountDisplay {
         accountDisplayFrame.setLocationRelativeTo(null);
 
 
-        displayUserAccounts(); //Call method to display accounts
+        //Call method to display accounts
+        displayUserAccounts();
 
 
 

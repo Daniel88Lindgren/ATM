@@ -10,7 +10,6 @@ import java.util.List;
 
 public class PaymentWindow {
     private JPanel Payment1;
-    private JTextField FromAccountField;
     private JTextField ocrNumberField;
     private JButton PaymentButton;
     private JButton backToMenuButton;
@@ -22,8 +21,6 @@ public class PaymentWindow {
     private DefaultTableModel paymentHistoryModel;
     private JFrame frame;
 
-
-    private UserManager currentUserManager;
 
     // List to store generated bills
     private List<Bill> bills;
@@ -37,7 +34,7 @@ public class PaymentWindow {
 
 
 
-
+        // Initialize GUI components
         frame = new JFrame("Payment Window");
         frame.setContentPane(Payment1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -65,7 +62,7 @@ public class PaymentWindow {
             paymentHistoryModel.addRow(new Object[]{bill.getOcrNumber(), bill.getAmount()});
         }
 
-
+        //Button to accept bill payment
         PaymentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,6 +70,7 @@ public class PaymentWindow {
             }
         });
 
+        //Button to get back to main menu
         backToMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -82,7 +80,7 @@ public class PaymentWindow {
         });
 
 
-
+        //Button for displaying paid bill history for specific user
         paymentHistoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

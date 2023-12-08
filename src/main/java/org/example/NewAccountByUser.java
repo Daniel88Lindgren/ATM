@@ -18,6 +18,7 @@ public class NewAccountByUser {
 
     public NewAccountByUser() {
 
+        // Initialize GUI components
 
         JFrame NewAccountByUserFrame = new JFrame("Create new account");
         NewAccountByUserFrame.setVisible(true);

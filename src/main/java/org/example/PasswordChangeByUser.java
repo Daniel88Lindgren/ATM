@@ -13,6 +13,8 @@ public class PasswordChangeByUser {
 
     public PasswordChangeByUser() {
 
+        // Initialize GUI components
+
         JFrame PasswordChangeByUserFrame = new JFrame("Login Window");
         PasswordChangeByUserFrame.setVisible(true);
         PasswordChangeByUserFrame.setSize(300, 150);

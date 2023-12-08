@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 public class Account {
 
     private JButton accountInfoButton;
-    private JButton changeAccountDetailsButton;
     private JButton backToMenuButton;
     private JPanel accountJPanel;
     private JButton changePasswordButton;
@@ -17,6 +16,7 @@ public class Account {
     //Menu for users account
     public Account() {
 
+        // Initialize GUI components
 
         JFrame accountFrame = new JFrame("Account");
         accountFrame.setVisible(true);
@@ -29,7 +29,7 @@ public class Account {
 
 
 
-
+        //Button for displaying logged-in user accounts
         accountInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,6 +38,8 @@ public class Account {
 
             }
         });
+
+        //Button to get back to main menu
         backToMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,6 +48,7 @@ public class Account {
             }
         });
 
+        //Button for user to change password
         changePasswordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,6 +58,7 @@ public class Account {
             }
         });
 
+        //Button for user to create new account
         createNewAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
