@@ -20,7 +20,7 @@ public class Account {
 
         JFrame accountFrame = new JFrame("Account");
         accountFrame.setVisible(true);
-        accountFrame.setSize(450, 300);
+        accountFrame.setSize(200, 300);
         accountFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         accountFrame.setContentPane(accountJPanel);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));

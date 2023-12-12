@@ -11,8 +11,9 @@ public class AccountDisplay {
 
     private JButton backButton;
     private JPanel accountDisplayJPanel;
-    private JLabel displayAccounts;
     private JLabel name;
+    private JList accountDisplayList;
+    private JScrollPane accountDisplayScroll;
 
 
     public AccountDisplay() {
@@ -22,12 +23,13 @@ public class AccountDisplay {
 
         JFrame accountDisplayFrame = new JFrame("Your account info");
         accountDisplayFrame.setVisible(true);
-        accountDisplayFrame.setSize(450, 300);
+        accountDisplayFrame.setSize(400, 250);
         accountDisplayFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         accountDisplayFrame.setContentPane(accountDisplayJPanel);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
         accountDisplayFrame.setIconImage(icon.getImage());
         accountDisplayFrame.setLocationRelativeTo(null);
+
 
 
         //Call method to display accounts
@@ -50,17 +52,20 @@ public class AccountDisplay {
     // Method to display the current user's accounts
     private void displayUserAccounts() {
         List<UserManager.Account> accounts = UserManager.getCurrentUserAccounts();
-        StringBuilder accountsInfo = new StringBuilder("<html>"); // Using HTML for multiline
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
         for (UserManager.Account account : accounts) {
-            accountsInfo.append("").append(account.getAccountName())
-                    .append(", Account nr: ").append(account.getAccountNr())
-                    .append(", Balance: ").append(String.format("%.2f", account.getBalance()))
-                    .append("<br>"); // Line break for each account
+            String accountInfo = account.getAccountName() +
+                    ", Account nr: " + account.getAccountNr() +
+                    ", Balance: " + String.format("%.2f", account.getBalance());
+            listModel.addElement(accountInfo);
         }
-        accountsInfo.append("</html>"); // Closing HTML tag
 
-        displayAccounts.setText(accountsInfo.toString()); // Setting text to JLabel
+        // Set the model for the existing JList
+        accountDisplayList.setModel(listModel);
 
+        // Set the JList to be the view for the JScrollPane
+        accountDisplayScroll.setViewportView(accountDisplayList);
     }
 
 

@@ -31,7 +31,7 @@ public class AdminWindow {
 
         JFrame jFrame = new JFrame("Admin Window");
         jFrame.setVisible(true);
-        jFrame.setSize(500, 500);
+        jFrame.setSize(550, 500);
         jFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         jFrame.setContentPane(AdminWindow);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
@@ -139,9 +139,9 @@ public class AdminWindow {
     //Visar Användare i TextPane
     private void displayUserInfo(UserManager selectedUser) {
         //Visar användar informationen
-        userInfo = "User Information:"
+        userInfo = "User Information:\n"
                 + "\nUser: " + selectedUser.getUsername()
-                + "\nPassword: " + selectedUser.getPassword() + "\n---------------------------------------------------";
+                + "\nPassword: " + selectedUser.getPassword() + "\n---------------------------------------------------\n";
 
         //När man väljer ny användare så nollas displayAccountInfo
         accountInfo = "";
@@ -154,10 +154,10 @@ public class AdminWindow {
     private void displayAccountInfo(UserManager.Account selectedAccount) {
         //Visar kontoinformationen
         accountInfo =
-                "\n" + "Account Information:"
+                "Account Information:\n"
                 + "\nAccount Name: " + selectedAccount.getAccountName()
                 + "\nAccount Number: " + selectedAccount.getAccountNr()
-                + "\nBalance: " + selectedAccount.getBalance() + "\n---------------------------------------------------";
+                + "\nBalance: " + selectedAccount.getBalance() + "\n---------------------------------------------------\n";
 
         //Visar Användarinformation och kontoinformation
         InformationText.setText(userInfo + accountInfo);
@@ -167,15 +167,24 @@ public class AdminWindow {
         StringBuilder infoBuilder = new StringBuilder();
 
         // Display transaction history
-        infoBuilder.append("\nTransactions:\n");
-        for (String transactionRecord : transactionHistory) {
-            infoBuilder.append(transactionRecord).append("\n---------------------------------------------------");
+        infoBuilder.append("Transactions:\n\n");
+        if (!transactionHistory.isEmpty()) {
+            for (String transactionRecord : transactionHistory) {
+                infoBuilder.append(transactionRecord).append("\n");
+            }
+        } else {
+            infoBuilder.append("No Transaction History found...\n").append("\n---------------------------------------------------\n");
         }
 
-        // Display payment history
-        infoBuilder.append("\nPayments:\n");
-        for (String paymentRecord : paymentHistory) {
-            infoBuilder.append(paymentRecord).append("\n---------------------------------------------------");
+// Display payment history
+        infoBuilder.append("\n---------------------------------------------------\n");
+        infoBuilder.append("Payments:\n");
+        if (!paymentHistory.isEmpty()) {
+            for (String paymentRecord : paymentHistory) {
+                infoBuilder.append(paymentRecord).append("\n");
+            }
+        } else {
+            infoBuilder.append("No Payment History found...\n").append("\n---------------------------------------------------\n");
         }
 
         InformationText.setText(userInfo + accountInfo + infoBuilder.toString());

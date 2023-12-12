@@ -37,7 +37,7 @@ public class Transaction {
         transactionFrame = new JFrame("Transaction window");
         transactionFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         transactionFrame.setContentPane(Transaction1);
-        transactionFrame.setSize(500, 500);
+        transactionFrame.setSize(550, 500);
         transactionFrame.setLocationRelativeTo(null);
         transactionFrame.setVisible(true);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
