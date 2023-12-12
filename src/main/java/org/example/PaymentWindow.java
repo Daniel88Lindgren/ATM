@@ -8,10 +8,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class PaymentWindow {
     private JPanel Payment1;
@@ -29,6 +26,9 @@ public class PaymentWindow {
     private List<Bill> bills;
     //List history for paid bills
     private final DefaultListModel<String> paymentHistoryListModel = new DefaultListModel<>();
+    private UserManager currentUserManager = UserManager.getCurrentUser();
+    private List<String> paymentHistory = currentUserManager.getPaymentHistory();
+
 
 
 
@@ -45,6 +45,7 @@ public class PaymentWindow {
         frame.setIconImage(icon.getImage());
         frame.setLocationRelativeTo(null);
         list1.setModel(paymentHistoryListModel);
+
 
 
         // Initialize the table model
@@ -247,7 +248,8 @@ public class PaymentWindow {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = now.format(formatter);
-        String record = formattedDate  + " - Paid: " + bill.getAmount()+ "SEK" + " to OCR: " + bill.getOcrNumber();
+        String accountName = userAccount.getAccountName();
+        String record = formattedDate + " - " + accountName  + " - Paid: " + bill.getAmount()+ "SEK" + " to OCR: " + bill.getOcrNumber();
         paymentHistoryListModel.addElement(record);
 
         if (userAccount != null) {
@@ -260,14 +262,22 @@ public class PaymentWindow {
     }
 
     private void loadPaymentHistory() {
-        UserManager currentUser = UserManager.getCurrentUser();
-        if (currentUser != null) {
-            List<String> paymentHistory = currentUser.getPaymentHistory();
-            for (String paymentRecord : paymentHistory) {
-                paymentHistoryListModel.addElement(paymentRecord);
+        paymentHistoryListModel.clear(); // Clear the existing history
+
+        UserManager currentUserManager = UserManager.getCurrentUser();
+        if (currentUserManager != null) {
+            Set<String> addedRecords = new HashSet<>(); // To avoid duplicates
+            for (UserManager.Account account : currentUserManager.getAccounts()) {
+                for (String paymentRecord : account.getPaymentHistory()) {
+                    if (!addedRecords.contains(paymentRecord)) {
+                        paymentHistoryListModel.addElement(paymentRecord);
+                        addedRecords.add(paymentRecord);
+                    }
+                }
             }
         }
     }
+
 
 
     //Method to extract the account number from the selected string

@@ -173,7 +173,7 @@ public class AdminWindow {
                 infoBuilder.append(transactionRecord).append("\n");
             }
         } else {
-            infoBuilder.append("No Transaction History found...\n").append("\n---------------------------------------------------\n");
+            infoBuilder.append("No Transaction History found...\n");
         }
 
 // Display payment history
@@ -184,7 +184,7 @@ public class AdminWindow {
                 infoBuilder.append(paymentRecord).append("\n");
             }
         } else {
-            infoBuilder.append("No Payment History found...\n").append("\n---------------------------------------------------\n");
+            infoBuilder.append("No Payment History found...\n");
         }
 
         InformationText.setText(userInfo + accountInfo + infoBuilder.toString());
