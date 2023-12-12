@@ -15,7 +15,7 @@
         <properties>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
-          <text value="Welcome to main menu!"/>
+          <text value=""/>
         </properties>
       </component>
       <component id="72799" class="javax.swing.JButton" binding="paymentButton" default-binding="true">

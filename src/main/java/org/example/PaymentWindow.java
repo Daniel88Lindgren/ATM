@@ -33,7 +33,6 @@ public class PaymentWindow {
     public PaymentWindow() {
 
 
-
         // Initialize GUI components
         frame = new JFrame("Payment Window");
         frame.setContentPane(Payment1);
@@ -227,16 +226,22 @@ public class PaymentWindow {
         ocrNumberField.setText("");
 
         // Record the payment
-        addPaymentToHistory(bill);
+        addPaymentToHistory(bill, account);
     }
 
 
     //Method to add users payment history
-    private void addPaymentToHistory(Bill bill) {
+    private void addPaymentToHistory(Bill bill, UserManager.Account userAccount) {
         String record = bill.getPaymentDate() + " - Paid " + bill.getAmount() + " for OCR " + bill.getOcrNumber();
         paymentHistoryListModel.addElement(record);
-        //Add payment record to the current user's payment history in the UserManager.
-        UserManager.getCurrentUser().addPaymentRecord(record);
+
+        if (userAccount != null) {
+            // Add payment record to the specified user account
+            userAccount.addPaymentRecord(record);
+        } else {
+            // Handle the case where the user account is not provided
+            System.out.println("No user account found.");
+        }
     }
 
 

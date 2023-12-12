@@ -24,6 +24,7 @@ public class AdminWindow {
     private JComboBox<String> userComboBox;
     private UserManager selectedUser;
     private UserManager userManager;
+    private UserManager.Account selectedAccount;
 
     public AdminWindow() {
         this.userManager = selectedUser;
@@ -76,16 +77,18 @@ public class AdminWindow {
                 if (!e.getValueIsAdjusting() && selectedUser != null) {
                     String selectedAccountName = (String) AccountSelection.getSelectedValue();
                     if (selectedAccountName != null) {
-                        UserManager.Account selectedAccount = findAccountByName(selectedUser, selectedAccountName);
+                        selectedAccount = findAccountByName(selectedUser, selectedAccountName);
                         if (selectedAccount != null) {
                             displayAccountInfo(selectedAccount);
-                            List<String> transactionHistory = selectedUser.getTransactionHistory(); // Use UserManager instance
-                            displayTransactionInfo(transactionHistory);
+                            List<String> transactionHistory = selectedAccount.getTransactionHistory();
+                            List<String> paymentHistory = selectedAccount.getPaymentHistory();
+                            displayTransactionAndPaymentInfo(transactionHistory, paymentHistory);
                         }
                     }
                 }
             }
         });
+
 
 
         AdminMainMenuButton.addActionListener(new ActionListener() {
@@ -138,7 +141,7 @@ public class AdminWindow {
         //Visar användar informationen
         userInfo = "User Information:"
                 + "\nUser: " + selectedUser.getUsername()
-                + "\nPassword: " + selectedUser.getPassword() + "\n";
+                + "\nPassword: " + selectedUser.getPassword() + "\n---------------------------------------------------";
 
         //När man väljer ny användare så nollas displayAccountInfo
         accountInfo = "";
@@ -154,20 +157,28 @@ public class AdminWindow {
                 "\n" + "Account Information:"
                 + "\nAccount Name: " + selectedAccount.getAccountName()
                 + "\nAccount Number: " + selectedAccount.getAccountNr()
-                + "\nBalance: " + selectedAccount.getBalance();
+                + "\nBalance: " + selectedAccount.getBalance() + "\n---------------------------------------------------";
 
         //Visar Användarinformation och kontoinformation
         InformationText.setText(userInfo + accountInfo);
     }
 
-    private void displayTransactionInfo(List<String> transactionHistory) {
-        StringBuilder transactionInfo = new StringBuilder("\n" + "\nTransactions:");
+    private void displayTransactionAndPaymentInfo(List<String> transactionHistory, List<String> paymentHistory) {
+        StringBuilder infoBuilder = new StringBuilder();
 
+        // Display transaction history
+        infoBuilder.append("\nTransactions:\n");
         for (String transactionRecord : transactionHistory) {
-            transactionInfo.append("\n").append(transactionRecord).append("\n");
+            infoBuilder.append(transactionRecord).append("\n---------------------------------------------------");
         }
 
-        InformationText.setText(userInfo + accountInfo + transactionInfo.toString());
+        // Display payment history
+        infoBuilder.append("\nPayments:\n");
+        for (String paymentRecord : paymentHistory) {
+            infoBuilder.append(paymentRecord).append("\n---------------------------------------------------");
+        }
+
+        InformationText.setText(userInfo + accountInfo + infoBuilder.toString());
     }
 
     //Metod för att koppla rätt konto till rätt namn

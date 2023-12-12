@@ -24,6 +24,8 @@ public class MainMenu {
         jFrame.setIconImage(icon.getImage());
         jFrame.setLocationRelativeTo(null);
 
+        Mainmenu.setText("Welcome: " + UserManager.getCurrentUser().getUsername() + "!");
+
 
         paymentButton.addActionListener(new ActionListener() {
             @Override
@@ -77,7 +79,7 @@ public class MainMenu {
             public void actionPerformed(ActionEvent e) {
                 // Kollar ifall nuvarande användare är "admin". Annars har man inte tillgång till Admin Window.
                 if (UserManager.getCurrentUser() != null &&
-                        "admin".equals(UserManager.getCurrentUser().getUsername())) {
+                        "Admin".equals(UserManager.getCurrentUser().getUsername())) {
                     // Open the AdminWindow
                     jFrame.setVisible(false);
                     new AdminWindow();
