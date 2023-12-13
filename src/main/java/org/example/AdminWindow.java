@@ -42,7 +42,7 @@ public class AdminWindow {
         this.userManager = userManager;
 
 
-        //Skapar listan med användare, baserat på användarnamnet
+        //Create a list of users
         List<UserManager> users = UserManager.getUsers();
 
         DefaultListModel<String> userModel = new DefaultListModel<>();
@@ -53,7 +53,7 @@ public class AdminWindow {
 
         UserSelection.setModel(userModel);
 
-        //ListSelection för användare
+        //ListSelection for users
         UserSelection.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -70,7 +70,7 @@ public class AdminWindow {
             }
         });
 
-        //listSelection till Konton
+        //listSelection for accounts
         AccountSelection.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -90,7 +90,7 @@ public class AdminWindow {
         });
 
 
-
+        //Button back to main menu
         AdminMainMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class AdminWindow {
                 new MainMenu();
             }
         });
-
+        //Button to Admin Settings window
         settingsAdmin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,7 +109,7 @@ public class AdminWindow {
 
     }
 
-    //Uppdaterar kontolistan när man väljer en ny användare
+    //Updates accountlist when you select a user
     private void updateAccountList(String username) {
         DefaultListModel<String> accountListModel = new DefaultListModel<>();
         selectedUser = findUserByUsername(username);
@@ -122,11 +122,10 @@ public class AdminWindow {
 
         AccountSelection.setModel(accountListModel);
 
-        //Visa användar information
         displayUserInfo(selectedUser);
     }
 
-    //Metod för att hitta Användare kopplat till Användarnamn,
+    //Method to find a user connected to a username
     private UserManager findUserByUsername(String username) {
         for (UserManager userManager : UserManager.getUsers()) {
             if (userManager.getUsername().equals(username)) {
@@ -136,21 +135,20 @@ public class AdminWindow {
         return null; //Användare hittades inte
     }
 
-    //Visar Användare i TextPane
+    //Displays the userinformation in the TextPane
     private void displayUserInfo(UserManager selectedUser) {
         //Visar användar informationen
         userInfo = "User Information:\n"
                 + "\nUser: " + selectedUser.getUsername()
                 + "\nPassword: " + selectedUser.getPassword() + "\n---------------------------------------------------\n";
-
-        //När man väljer ny användare så nollas displayAccountInfo
+        //Clears accounts
         accountInfo = "";
 
-        //Visar Användarinformation och kontoinformation
+        //Displays user and account information
         InformationText.setText(userInfo + accountInfo);
     }
 
-    //Visar kontoinformationen i JList ACCOUNT
+    //Displays account information in JList Account
     private void displayAccountInfo(UserManager.Account selectedAccount) {
         //Visar kontoinformationen
         accountInfo =
@@ -159,10 +157,11 @@ public class AdminWindow {
                 + "\nAccount Number: " + selectedAccount.getAccountNr()
                 + "\nBalance: " + selectedAccount.getBalance() + "\n---------------------------------------------------\n";
 
-        //Visar Användarinformation och kontoinformation
+        //Displays the selected user and its account information in Text Pane
         InformationText.setText(userInfo + accountInfo);
     }
 
+    //Displays the Transaction and Payment information from the selected user and account in Text Pane
     private void displayTransactionAndPaymentInfo(List<String> transactionHistory, List<String> paymentHistory) {
         StringBuilder infoBuilder = new StringBuilder();
 
@@ -176,7 +175,7 @@ public class AdminWindow {
             infoBuilder.append("No Transaction History found...\n");
         }
 
-// Display payment history
+        // Display payment history
         infoBuilder.append("\n---------------------------------------------------\n");
         infoBuilder.append("Payments:\n");
         if (!paymentHistory.isEmpty()) {
@@ -190,14 +189,14 @@ public class AdminWindow {
         InformationText.setText(userInfo + accountInfo + infoBuilder.toString());
     }
 
-    //Metod för att koppla rätt konto till rätt namn
+    //Method to connect account to the right name
     private UserManager.Account findAccountByName(UserManager selectedUser, String accountName) {
         for (UserManager.Account account : selectedUser.getAccounts()) {
             if (account.getAccountName().equals(accountName)) {
                 return account;
             }
         }
-        return null; // Konto hittades inte
+        return null; // Account not found
     }
 
 }
