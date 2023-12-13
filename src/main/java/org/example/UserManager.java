@@ -62,7 +62,17 @@ public class UserManager {
     public List<Account> getAccounts() {
         return accounts;
     }
-
+    public static List<Account> getOtherAccounts(Account excludedAccount) {
+        List<Account> otherAccounts = new ArrayList<>();
+        if (currentUser != null) {
+            for (Account account : currentUser.getAccounts()) {
+                if (!account.equals(excludedAccount)) {
+                    otherAccounts.add(account);
+                }
+            }
+        }
+        return otherAccounts;
+    }
     public static UserManager getCurrentUser() {
         return currentUser;
     }
@@ -189,6 +199,25 @@ public class UserManager {
             this.balance = balance;
         }
 
+        private List<String> transactionHistory = new ArrayList<>();
+
+        public List<String> getTransactionHistory() {
+            return transactionHistory;
+        }
+
+        public void addTransactionRecord(String transactionRecord) {
+            transactionHistory.add(transactionRecord);
+        }
+
+        private List<String> paymentHistory = new ArrayList<>();
+        public List<String> getPaymentHistory() {
+            return paymentHistory;
+        }
+
+        public void addPaymentRecord(String paymentRecord) {
+            paymentHistory.add(paymentRecord);
+        }
+
         public String getAccountName() {
             return accountName;
         }
@@ -226,12 +255,12 @@ public class UserManager {
 
     // Static block to initialize users and their accounts
     static {
-        UserManager userLars = new UserManager("lars", "111");
-        UserManager userArta = new UserManager("arta", "222");
-        UserManager userMickey = new UserManager("mickey", "333");
-        UserManager userDaniel = new UserManager("daniel", "444");
-        UserManager userAnders = new UserManager("anders", "555");
-        UserManager userAdmin = new UserManager("admin", "admin");
+        UserManager userLars = new UserManager("Lars", "111");
+        UserManager userArta = new UserManager("Arta", "222");
+        UserManager userMickey = new UserManager("Mickey", "333");
+        UserManager userDaniel = new UserManager("Daniel", "444");
+        UserManager userAnders = new UserManager("Anders", "555");
+        UserManager userAdmin = new UserManager("Admin", "admin");
 
         userLars.addAccount("Checking", 1, 5000);
         userLars.addAccount("Savings", 2, 6000);

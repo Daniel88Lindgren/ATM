@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Transaction {
     private JTextField textField1;
@@ -18,23 +21,26 @@ public class Transaction {
     private JPanel Transaction1;
     private JButton backToMenuButton;
 
-    private JComboBox comboBox1;
-    private JComboBox comboBox2;
+    private JComboBox<String> comboBox1;
+    private JComboBox<String> comboBox2;
 
     private DefaultListModel<String> transactionHistoryListModel = new DefaultListModel<>();
     private JFrame transactionFrame;
+    private List<UserManager.Account> userAccounts;
+
 
     public Transaction() {
         setupUI();
+        populateComboBoxes();
         attachEventHandlers();
-        loadTransactionHistory(); // Ladda historiken när fönstret öppnas
+        loadTransactionHistory();
     }
 
     private void setupUI() {
         transactionFrame = new JFrame("Transaction window");
         transactionFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         transactionFrame.setContentPane(Transaction1);
-        transactionFrame.setSize(500, 500);
+        transactionFrame.setSize(600, 500);
         transactionFrame.setLocationRelativeTo(null);
         transactionFrame.setVisible(true);
         ImageIcon icon = new ImageIcon(getClass().getResource("/dollarSymbol.jpg"));
@@ -42,8 +48,43 @@ public class Transaction {
         list1.setModel(transactionHistoryListModel);
 
     }
+    private void populateComboBoxes() {
+        List<UserManager.Account> userAccounts = UserManager.getCurrentUserAccounts();
+        comboBox1.removeAllItems(); // Clear comboBox1
+        comboBox2.removeAllItems(); // Clear comboBox2
+
+        // Populate comboBox1
+        for (UserManager.Account account : userAccounts) {
+            String accountRepresentation = getAccountRepresentation(account);
+            comboBox1.addItem(accountRepresentation);
+        }
+
+        // Add action listener to comboBox1
+        comboBox1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Clear comboBox2
+                comboBox2.removeAllItems();
+
+                // Get the selected account from comboBox1
+                String selectedAccountString = (String) comboBox1.getSelectedItem();
+                UserManager.Account selectedAccount = getAccountFromString(selectedAccountString);
+
+                // Populate comboBox2 excluding the selected account from comboBox1
+                for (UserManager.Account account : userAccounts) {
+                    if (account != selectedAccount) {
+                        String accountRepresentation = getAccountRepresentation(account);
+                        comboBox2.addItem(accountRepresentation);
+                    }
+                }
+            }
+        });
+    }
+
 
     private void attachEventHandlers() {
+        // befintliga händelselyssnare...
+
         confirmTransferButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,29 +99,31 @@ public class Transaction {
                 new MainMenu();
             }
         });
+
+        textField3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performTransfer();
+            }
+        });
+
+
     }
+
 
     private void performTransfer() {
         Color successGreen = new Color(30, 130, 76); // En mörkare, dämpad grön
 
         try {
-            int sourceAccountNumber = Integer.parseInt(textField1.getText());
-            int destinationAccountNumber = Integer.parseInt(textField2.getText());
+            String sourceAccountString = (String) comboBox1.getSelectedItem();
+            String destinationAccountString = (String) comboBox2.getSelectedItem();
+
+            UserManager.Account sourceAccount = getAccountFromString(sourceAccountString);
+            UserManager.Account destinationAccount = getAccountFromString(destinationAccountString);
             double amountToTransfer = Double.parseDouble(textField3.getText());
 
-            List<UserManager.Account> accounts = UserManager.getCurrentUserAccounts();
-
-            UserManager.Account sourceAccount = null, destinationAccount = null;
-            for (UserManager.Account account : accounts) {
-                if (account.getAccountNr() == sourceAccountNumber) {
-                    sourceAccount = account;
-                } else if (account.getAccountNr() == destinationAccountNumber) {
-                    destinationAccount = account;
-                }
-            }
-
             if (sourceAccount == null || destinationAccount == null) {
-                confirmLabel.setText("Invalid account number(s), please try again");
+                confirmLabel.setText("Invalid account selection, please try again");
                 confirmLabel.setForeground(Color.RED);
                 return;
             }
@@ -88,9 +131,16 @@ public class Transaction {
             if (sourceAccount.getBalance() >= amountToTransfer) {
                 sourceAccount.withdraw(amountToTransfer);
                 destinationAccount.deposit(amountToTransfer);
-                addTransactionToHistory(sourceAccountNumber, destinationAccountNumber, amountToTransfer);
+
+                addTransactionToHistory(sourceAccount, destinationAccount, amountToTransfer);
+
                 confirmLabel.setText("You successfully made a transfer");
-                confirmLabel.setForeground(successGreen); // Använder den anpassade gröna färgen
+                confirmLabel.setForeground(successGreen);
+
+                // Uppdatera comboBox1 och comboBox2
+                comboBox1.removeAllItems();
+                comboBox2.removeAllItems();
+                populateComboBoxes();
             } else {
                 confirmLabel.setText("You don't have enough money, check your balance!");
                 confirmLabel.setForeground(Color.RED);
@@ -101,28 +151,60 @@ public class Transaction {
         }
     }
 
-    private void addTransactionToHistory(int sourceAccount, int destinationAccount, double amount) {
+    private void addTransactionToHistory(UserManager.Account sourceAccount, UserManager.Account destinationAccount, double amount) {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = now.format(formatter);
         String record = formattedDate + " - Transferred " + amount +
-                " from account " + sourceAccount + " to " + destinationAccount;
+                " from account " + sourceAccount.getAccountName() + " to " + destinationAccount.getAccountName();
+
+        // Add the transaction record only once to the JList model
         transactionHistoryListModel.addElement(record);
-        UserManager.getCurrentUser().addTransactionRecord(record); // Spara transaktionshistoriken i UserManager
+
+        // Create a combined record for both source and destination accounts
+        String combinedRecord = getTransactionRecord(sourceAccount, destinationAccount, amount);
+
+        // Add the combined transaction record to both accounts
+        sourceAccount.addTransactionRecord(combinedRecord);
+        destinationAccount.addTransactionRecord(combinedRecord);
+    }
+    private String getTransactionRecord(UserManager.Account sourceAccount, UserManager.Account destinationAccount, double amount) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = now.format(formatter);
+        return formattedDate + " - Transferred " + amount +
+                " from account " + sourceAccount.getAccountNr() + " to " + destinationAccount.getAccountNr();
     }
 
+
     private void loadTransactionHistory() {
-        transactionHistoryListModel.clear(); // Rensa befintlig historik
+        transactionHistoryListModel.clear(); // Clear the existing history
+        Set<String> addedRecords = new HashSet<>();
+
         UserManager currentUser = UserManager.getCurrentUser();
         if (currentUser != null) {
-            for (String record : currentUser.getTransactionHistory()) {
-                transactionHistoryListModel.addElement(record);
+            for (UserManager.Account account : currentUser.getAccounts()) {
+                for (String transactionRecord : account.getTransactionHistory()) {
+                    if (!addedRecords.contains(transactionRecord)) {
+                        transactionHistoryListModel.addElement(transactionRecord);
+                        addedRecords.add(transactionRecord);
+                    }
+                }
             }
         }
     }
-    // Lägg till metoden för att rensa transaktionshistoriken om användaren loggar ut
-    public void clearTransactionHistory() {
-        transactionHistoryListModel.clear();
+    private UserManager.Account getAccountFromString(String accountRepresentation) {
+        List<UserManager.Account> userAccounts = UserManager.getCurrentUserAccounts();
+        for (UserManager.Account account : userAccounts) {
+            if ((account.getAccountName() + " - " + account.getAccountNr() + " (" + account.getBalance() + "kr)")
+                    .equals(accountRepresentation)) {
+                return account;
+            }
+        }
+        return null; // No matching account found
+    }
+    private String getAccountRepresentation(UserManager.Account account) {
+        return account.getAccountName() + " - " + account.getAccountNr() + " (" + account.getBalance() + "kr)";
     }
 }
 
