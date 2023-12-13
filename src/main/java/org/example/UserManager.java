@@ -6,8 +6,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class UserManager {
     private String username;
     private String password;
@@ -20,16 +18,13 @@ public class UserManager {
     private static List<UserManager> users = new ArrayList<>();
     private static UserManager currentUser;
 
-
     //List for paid bills
     private List<String> paymentHistory = new ArrayList<>();
-
 
     // Gets payment history
     public List<String> getPaymentHistory() {
         return paymentHistory;
     }
-
 
     public static void setCurrentUser(UserManager currentUser) {
             UserManager.currentUser = currentUser;
@@ -76,8 +71,6 @@ public class UserManager {
         paymentHistory.add(record);
     }
 
-
-
     // Method to authenticate a user
         public static boolean authenticate(String username, String password) {
             for (UserManager user : users) {
@@ -89,7 +82,6 @@ public class UserManager {
             return false; // No matching user found
         }
 
-
     // Method to get the current user's accounts
     public static List<Account> getCurrentUserAccounts() {
         if (currentUser != null) {
@@ -99,21 +91,17 @@ public class UserManager {
         }
     }
 
-
     public UserManager(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-
+    // Sorry guy´s, your money is gone!!
     public static void clearCurrentUserAccounts() {
         if (currentUser != null) {
             currentUser.getAccounts().clear();
         }
     }
-
-
-
 
     public void addAccount(String accountName, int accountNr, double balance) {
         Account newAccount = new Account(accountName, accountNr, balance);
@@ -147,9 +135,6 @@ public class UserManager {
         return null;
     }
 
-
-
-
     //Method for the user to change password
     public static void updateCurrentUserPassword(String newPassword) {
         if (currentUser != null) {
@@ -157,22 +142,13 @@ public class UserManager {
         }
     }
 
-
-
     public static void removeUser(UserManager user) {
         users.remove(user);
     }
 
-
-
-
     public void addTransactionRecord(String record) {
         transactionHistory.add(record); // Lägg till transaktionshistorik
     }
-
-
-
-
 
     public class Account {
         private String accountName;
@@ -212,7 +188,6 @@ public class UserManager {
             this.accountName = accountName;
         }
 
-
         public void deposit(double amount) {
             this.balance += amount;
         }
@@ -220,8 +195,6 @@ public class UserManager {
         public void setBalance(double balance) {
             this.balance = balance;
         }
-
-
     }
 
     // Static block to initialize users and their accounts
@@ -253,10 +226,10 @@ public class UserManager {
         userDaniel.addAccount("Investment", 15, 77000);
         userDaniel.addAccount("Retirement", 16, 1000000);
 
-        userAnders.addAccount("Checking", 17, 2000);
-        userAnders.addAccount("Savings", 18, 99000);
-        userAnders.addAccount("Investment", 19, 4500);
-        userAnders.addAccount("Retirement", 20, 500);
+        userAnders.addAccount("Checking", 17, 100000);
+        userAnders.addAccount("Savings", 18, 999000);
+        userAnders.addAccount("Investment", 19, 450000);
+        userAnders.addAccount("Retirement", 20, 50000000);
 
         userAdmin.addAccount("Admin", 99, 10000000);
 
@@ -265,7 +238,6 @@ public class UserManager {
         addUser(userMickey);
         addUser(userDaniel);
         addUser(userAnders);
-
         addUser(userAdmin);
     }
 }

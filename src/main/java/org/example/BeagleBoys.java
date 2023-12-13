@@ -1,13 +1,10 @@
 package org.example;
 
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class BeagleBoys {
-
 
     private JPanel panel1;
     private JLabel imageLabel;
@@ -15,10 +12,9 @@ public class BeagleBoys {
     private JFrame frame;
     private ImageIcon bIcon;
 
-
+    // Initialize the GUI components
     public BeagleBoys() {
-
-        frame = new JFrame("The Money is gone!! Even the Menu is Stolen!!");
+        frame = new JFrame("The Money is gone!!");
         frame.setSize(600, 357);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         panel1 = new JPanel();
@@ -30,7 +26,6 @@ public class BeagleBoys {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-
         BackToLoginWindow = new JButton("Back to Main Menu"); // Initialize the button
         panel1.add(BackToLoginWindow);
 
@@ -39,6 +34,7 @@ public class BeagleBoys {
             public void actionPerformed(ActionEvent e) {
                 try {
                     frame.setVisible(false);
+                    // Calls the next row to steal all the money and close the accounts
                     UserManager.clearCurrentUserAccounts();
                     new MainMenu();
                 } catch (Exception ex) {
@@ -47,5 +43,4 @@ public class BeagleBoys {
             }
         });
     }
-
 }
